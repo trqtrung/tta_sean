@@ -9,10 +9,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //app.use('/products', products);
 
 const api = require('./server/routes/api');
-
 app.use('/api', api);
 
-
+const sequelize = require('./server/routes/sequelize');
+app.use('/sequelize',sequelize);
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', function (req, res) {
