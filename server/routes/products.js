@@ -5,6 +5,7 @@ var express = require('express');
 
 var router = express.Router();
 
+const sproduct = require('../models/product');
 
 //var app = express();
 //app.use(bodyParser.json()); // support json encoded bodies
@@ -53,6 +54,49 @@ router.put('/edit',function(req,res){
         res.status(400).send('Invalid Product ID');
         return;
     }
+});
+
+//sequelize
+router.get('/s',function(req,res){
+    sproduct.findAll().then(pros =>{
+        res.json(pros);
+    });
+});
+
+router.get('/s/:id', function(req, res) {
+    var id = req.param('id');
+
+if(id > 0)
+{
+    sproduct.findById(id).then(pros =>{
+        res.send(pros);
+    });
+}
+else
+{
+    sproduct.findAll().then(pros =>{
+        res.json(pros);
+    });
+}
+
+});
+
+router.post('/s/',function(req,res){
+
+const newproduct = sproduct.build({
+    name: req.body.name,
+    price: req.body.price
+});
+
+newproduct.save().then(pro =>{
+    res.send(pro.get('name'));
+}).catch(error =>{
+    res.send(error);
+});
+
+// newproduct.create(newproduct).then(pro => {
+//         res.send(pro.get('name'));
+//     });
 });
 
 module.exports = router;
