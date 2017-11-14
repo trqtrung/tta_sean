@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const conn = require('./db');
+const conn = require('../config/db');
 
 /* GET api listing. */
 // router.get('/', (req, res) => {

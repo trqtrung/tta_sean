@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize  = require('../routes/sequelize');
+const sequelize  = require('../config/sequelize');
 const Product = sequelize.define('products',{
     id:{ type: Sequelize.INTEGER,
          autoIncrement: true,

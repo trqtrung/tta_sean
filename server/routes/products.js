@@ -1,4 +1,4 @@
-var conn = require('./db');
+var conn = require('../config/db');
 var express = require('express');
 
 //var bodyParser = require('body-parser');
