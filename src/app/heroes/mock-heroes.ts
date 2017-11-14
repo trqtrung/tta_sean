@@ -1,4 +1,4 @@
-import {Hero} from '../hero';
+import {Hero} from './shared/hero.model';
 
 export const HEROES: Hero[]=[
     { id:1, name: 'Thanh Soc Trang'},

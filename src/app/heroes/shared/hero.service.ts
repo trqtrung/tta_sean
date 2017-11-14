@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Hero } from './hero';
-import { HEROES } from './heroes/mock-heroes';
-import { MessageService } from './message.service';
+import { Hero } from './hero.model';
+//import { HEROES } from './heroes/mock-heroes';
+import { MessageService } from '../../messages/message.service';
 
 import 'rxjs/add/operator/map';
 
