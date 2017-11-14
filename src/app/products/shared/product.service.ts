@@ -29,6 +29,8 @@ export class ProductService{
     getProducts(): Observable<Product[]>{
         console.log('get all products');
 
+        return this.http.get<Product[]>(this.productUrl)
+        .map(res => (res as Product[]));
         
     }
 }

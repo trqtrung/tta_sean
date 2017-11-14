@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op;
 
-const sequelize = new Sequelize('tta_db', 'root', 'trung1992',{
+const sequelize = new Sequelize('tta', 'root', 'trung1992',{
     host: '127.0.0.1',
     dialect: 'mysql',
     operatorsAliases: Op,
