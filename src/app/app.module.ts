@@ -21,6 +21,7 @@ import {MessagesComponent} from './messages/messages.component';
 
 import {AppRoutingModule} from './shared/app-routing.module';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
 //import { InMemoryDataService} from './in-memory-data.service';
 
 @NgModule({
@@ -38,13 +39,14 @@ import {AppRoutingModule} from './shared/app-routing.module';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
- 
+    
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
     // HttpClientInMemoryWebApiModule.forRoot(
     //   InMemoryDataService, { dataEncapsulation: false }
     // )
+    BrowserAnimationsModule
   ],
   providers: [HeroService, MessageService],
   bootstrap: [AppComponent]
