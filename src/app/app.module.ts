@@ -14,6 +14,7 @@ import { HeroesComponent} from './heroes/heroes.component';
 import {HeroDetailComponent} from './heroes/hero-detail/hero-detail.component';
 import { HeroSearchComponent} from './heroes/hero-search/hero-search.component';
 
+import { ProductService} from './products/shared/product.service';
 import { ProductListComponent} from './products/product-list/product-list.component';
 
 import {MessageService } from './messages/message.service';
@@ -23,6 +24,8 @@ import {AppRoutingModule} from './shared/app-routing.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
 //import { InMemoryDataService} from './in-memory-data.service';
+
+import { MaterialModule} from './shared/material.module';
 
 @NgModule({
   declarations: [
@@ -46,9 +49,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //
     // HttpClientInMemoryWebApiModule.forRoot(
     //   InMemoryDataService, { dataEncapsulation: false }
     // )
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MaterialModule
   ],
-  providers: [HeroService, MessageService],
+  providers: [HeroService, MessageService, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

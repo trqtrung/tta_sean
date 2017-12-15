@@ -1,4 +1,19 @@
-<ul class="products">
+
+<h3>Product List</h3>
+<div class="example-container">
+    <mat-form-field>
+      <input matInput placeholder="Name">
+    </mat-form-field>
+  
+    <mat-form-field>
+        <input matInput placeholder="Price">
+    </mat-form-field>
+  
+
+        <button mat-button color="primary" (click)="save()">Create</button>
+ 
+  </div>
+  <ul class="products">
     <li *ngFor="let product of products">
       <span class="badge">{{product.id}}</span> {{product.name}}
     </li>
