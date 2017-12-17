@@ -15,6 +15,7 @@ const sproduct = require('../models/product');
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET", "POST" , "PUT");
     next();
   });
 
@@ -36,7 +37,7 @@ router.post('/add',function(req, res){
         conn.query(sql,[name,price], function (err, result) {
           if (err) throw err;
           console.log("1 record inserted, ID: " + result.insertId);
-          res.send("1 record inserted, ID: " + result.insertId + " - "+name);
+          res.send(JSON.stringify({messeage:"1 record inserted, ID: " + result.insertId + " - "+name}));
         });
 });
 

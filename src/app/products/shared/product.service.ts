@@ -31,8 +31,8 @@ export class ProductService{
 
     getProducts(): Observable<Product[]>{
         console.log('get all products');
-
-        return this.http.get<Product[]>(this.productUrl)
+        const url = `${this.productUrl}/all`;
+        return this.http.get<Product[]>(url)
         .map(res => (res as Product[]));
         
     }
@@ -41,7 +41,7 @@ export class ProductService{
         const url = `${this.productUrl}/add`;
         console.log('add product called in product service');
           return this.http.post<Product>(url, product, httpOptions).pipe(
-            tap((product: Product) => this.log(`added product w/ id=${product.id}`)),
+            tap((product: Product) => this.log(`added product w/ id=${product.name}`)),
             catchError(this.handleError<Product>('addProduct'))
           );
       }

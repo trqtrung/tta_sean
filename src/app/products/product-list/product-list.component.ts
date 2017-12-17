@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 
 import { Location } from '@angular/common';
 
+import { Observable } from 'rxjs/Rx';
+import { of } from 'rxjs/observable/of';
+
 import { Product } from '../shared/product.model';
 //import {HEROES} from './mock-heroes';
 import { ProductService } from '../shared/product.service';
 
+import {MatTableDataSource} from '@angular/material';
 //import {MessageService} from '../messages/message.service';
 
 @Component({
@@ -20,7 +24,10 @@ export class ProductListComponent implements OnInit{
     //selectedHero: Hero;
 
     products: Product[];
-    product: Product;
+    product = new Product;
+
+   
+    
 
     constructor(private productService: ProductService,
         private location: Location)
@@ -45,7 +52,26 @@ export class ProductListComponent implements OnInit{
           }
 
         save(): void{
-            console.log('create pressed');
-            this.productService.addProduct(this.product).subscribe(() => this.goBack());
+            console.log(`pressed save ${this.product}`);
+            this.productService.addProduct(this.product).subscribe();
         }
 }
+
+// export class TableBasicExample {
+//     displayedColumns = ['id', 'name', 'price'];
+//     dataSource = new MatTableDataSource<Product>(new Array<Product>());
+//   }
+
+// export class ProductDataSource extends DataSource<Product>{
+//     constructor(private products: Product[],
+//         private productService: ProductService){
+//         super();
+//     }
+
+//     connect(): Observable<Product[]>{
+//         return this.productService.getProducts()
+//         .subscribe(products => this.products = products);
+//     }
+
+//     disconnect(){}
+// }
