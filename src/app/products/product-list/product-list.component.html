@@ -6,8 +6,9 @@
     </mat-form-field>
   
     <mat-form-field>
-        <input [(ngModel)]="product.price" matInput placeholder="Price">
-    </mat-form-field>
+        <input matInput [(ngModel)]="product.price" type="number" class="right-align"  placeholder="Price">
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
   
 
         <button mat-button color="primary" (click)="save()">Create</button>
@@ -20,4 +21,35 @@
     </li>
   </ul>
 
+  <div class="example-container mat-elevation-z8">
+    <cdk-table #table [dataSource]="dataSource" class="example-table">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
   
+      <!-- ID Column -->
+      <ng-container cdkColumnDef="productId">
+        <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> ID </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.id}} </cdk-cell>
+      </ng-container>
+  
+      <!-- Progress Column -->
+      <ng-container cdkColumnDef="price">
+        <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Price </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.price}}</cdk-cell>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container cdkColumnDef="productName">
+        <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Name </cdk-header-cell>
+        <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.name}} </cdk-cell>
+      </ng-container>
+  
+      <cdk-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></cdk-header-row>
+      <cdk-row *cdkRowDef="let row; columns: displayedColumns;" class="example-row"></cdk-row>
+    </cdk-table>
+  </div>
+  
+  
+  <!-- Copyright 2017 Google Inc. All Rights Reserved.
+      Use of this source code is governed by an MIT-style license that
+      can be found in the LICENSE file at http://angular.io/license -->
