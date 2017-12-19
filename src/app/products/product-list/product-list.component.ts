@@ -46,7 +46,7 @@ export class ProductListComponent implements OnInit{
     
         ngOnInit(){
             //this.title = 'Products';
-            this.getProducts();
+            //this.getProducts();
 
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
@@ -68,8 +68,19 @@ export class ProductListComponent implements OnInit{
 
         save(): void{
             console.log(`pressed save ${this.product}`);
+
             this.productService.addProduct(this.product).subscribe();
             
+
+            //this.exampleDatabase = new ExampleDatabase(this.productService);
+            //this.dataSource = new ExampleDataSource(this.exampleDatabase);
+
+            this.clear();
+        }
+
+        clear(): void{
+            this.product.name = '';
+            this.product.price = 0;
         }
 }
   
