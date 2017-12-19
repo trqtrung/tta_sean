@@ -28,11 +28,8 @@ export class ProductListComponent implements OnInit{
     
     //remove because using routing
     //selectedHero: Hero;
-
-private proService: ProductService;
-
     public displayedColumns = ['productId', 'productName', 'price'];
-    public exampleDatabase = new ExampleDatabase();
+    public exampleDatabase : ExampleDatabase | null;
     public dataSource: ExampleDataSource | null;
 
     products: Product[];
@@ -43,13 +40,15 @@ private proService: ProductService;
         private location: Location)
         {
             //productService.getProducts().subscribe(data => this.dataChange.next(data));
-this.dataSource = new ExampleDataSource(this.exampleDatabase);
+
         }
         
     
         ngOnInit(){
             //this.title = 'Products';
             this.getProducts();
+
+            this.exampleDatabase = new ExampleDatabase(this.productService);
 
             this.dataSource = new ExampleDataSource(this.exampleDatabase);
         }
@@ -70,55 +69,35 @@ this.dataSource = new ExampleDataSource(this.exampleDatabase);
         save(): void{
             console.log(`pressed save ${this.product}`);
             this.productService.addProduct(this.product).subscribe();
+            
         }
 }
   
   /** Constants used to fill up our data base. */
-  const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-    'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-  const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-    'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-    'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
+//   const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
+//     'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
+//   const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
+//     'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
+//     'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
   
-  export interface UserData {
-    id: string;
-    name: string;
-    price: string;
-  }
+//   export interface UserData {
+//     id: string;
+//     name: string;
+//     price: string;
+//   }
   
 //   /** An example database that the data source uses to retrieve data for the table. */
   export class ExampleDatabase {
 
     /** Stream that emits whenever the data has been modified. */
     public dataChange: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
-    get data(): Product[] { return this.dataChange.value }
+    get data(): Product[] { return this.dataChange.value; }
 
 
 constructor(private productService: ProductService)
     {
         productService.getProducts().subscribe(data => this.dataChange.next(data));
     }
-  
-    /** Adds a new user to the database. */
-    // addUser() {
-    //   const copiedData = this.data.slice();
-    //   copiedData.push(this.createNewUser());
-    //   this.dataChange.next(copiedData);
-    // }
-  
-    // /** Builds and returns a new User. */
-    // private createNewUser() {
-    //   const name =
-    //       NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-    //       NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-  
-    //   return {
-    //     id: (this.data.length + 1).toString(),
-    //     name: name,
-    //     price: Math.round(Math.random() * 100).toString()
-    //     //color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-    //   };
-    // }
   }
   
   /**
@@ -129,20 +108,25 @@ constructor(private productService: ProductService)
    * should be rendered.
    */
   export class ExampleDataSource extends DataSource<any> {
-    constructor(private _productService: ProductService) {
+    constructor(private _exampleDatabase: ExampleDatabase) {
       super();
     }
   
     /** Connect function called by the table to retrieve one stream containing the data to render. */
     connect(): Observable<Product[]> {
-      const displayDataChanges = [this._productService.getProducts()]
+      const displayDataChanges = [this._exampleDatabase.dataChange]
 
-return Observable.merge(...displayDataChanges).map((data)=>{const clonedData = data.slice(); return data.slice();})
+return Observable.merge(...displayDataChanges).map(()=>{
+    
+    const data = this._exampleDatabase.data.slice();
+    
+    return data.slice();
+})
 
     }
   
     disconnect() {}
-  }
+}
   
   
   /**  Copyright 2017 Google Inc. All Rights Reserved.
