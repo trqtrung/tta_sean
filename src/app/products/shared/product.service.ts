@@ -46,6 +46,16 @@ export class ProductService{
           );
       }
 
+      addProductBySequelize(product:Product):Observable<Product>{
+        const url = `${this.productUrl}/s/`;
+
+        console.log('add product by sequelize called in product service');
+        return this.http.post<Product>(url, product, httpOptions).pipe(
+          tap((product: Product) => this.log(`added product w/ id=${product.name}`)),
+          catchError(this.handleError<Product>('addProductSequelize'))
+        );
+      }
+
         /**
    * Handle Http operation that failed.
    * Let the app continue.

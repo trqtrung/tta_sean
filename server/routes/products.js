@@ -32,6 +32,12 @@ router.get('/all', function(req, res){
 //insert product
 router.post('/add',function(req, res){       
     var name = req.body.name;
+    if(name === null || name ==='' || price <= 0)
+    {
+        res.send(JSON.stringify({messeage:'Invalid input'}));
+        return;
+    }
+
     var price = req.body.price;
         var sql = "INSERT INTO products (name, price) VALUES (?, ?)";
         conn.query(sql,[name,price], function (err, result) {
@@ -91,20 +97,27 @@ else
 
 router.post('/s/',function(req,res){
 
-const newproduct = sproduct.build({
-    name: req.body.name,
-    price: req.body.price
+    const newproduct = sproduct.build({
+        name: req.body.name,
+        price: req.body.price
+    });
+
+    newproduct.save().then(pro =>{
+        res.send(pro.get('name') + ' has been created via sequelize');
+    }).catch(error =>{
+        res.send(JSON.stringify({messeage:error}));
+    });
 });
 
-newproduct.save().then(pro =>{
-    res.send(pro.get('name'));
-}).catch(error =>{
-    res.send(error);
-});
+router.delete('/s/:id', (req,res) => {
 
-// newproduct.create(newproduct).then(pro => {
-//         res.send(pro.get('name'));
-//     });
-});
+    const id = req.params.id;
+
+    sproduct.destroy({where:{id: id}}).then(deletedProduct => {
+        res.json(`product id ${id} has been deleted via sequelize`);
+        console.log('deleted via sequelize');
+    })
+    
+})
 
 module.exports = router;

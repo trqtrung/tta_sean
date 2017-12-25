@@ -1,3 +1,5 @@
+'use strict'
+
 const Sequelize = require('sequelize');
 const sequelize  = require('../config/sequelize');
 const Product = sequelize.define('products',{
@@ -7,7 +9,14 @@ const Product = sequelize.define('products',{
         },
     name:{
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        isUnique: function (name, done){
+            Product.find({where:{name: name}}).then(function(product){
+                if(product){
+                    throw new Error('Product name already in use');
+                }
+            });
+        }
     },
     price:{
         type: Sequelize.DECIMAL(10, 2) 

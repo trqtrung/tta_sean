@@ -78,6 +78,16 @@ export class ProductListComponent implements OnInit{
             this.clear();
         }
 
+        save_sequlize(): void{
+            console.log('save with sequelize');
+
+            this.productService.addProductBySequelize(this.product).subscribe();
+        }
+
+        selectRow(row){
+            console.log(row)
+        }
+        
         clear(): void{
             this.product.name = '';
             this.product.price = 0;
