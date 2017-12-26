@@ -2,6 +2,9 @@
 <h3>Product List</h3>
 <div class="example-container">
     <mat-form-field>
+        <input [(ngModel)]="product.id" matInput placeholder="ID" readonly>
+      </mat-form-field>
+    <mat-form-field>
       <input [(ngModel)]="product.name" required matInput placeholder="Name">
     </mat-form-field>
   
@@ -36,7 +39,7 @@
 
 <ng-container cdkColumnDef="productName">
   <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Name </cdk-header-cell>
-  <cdk-cell *cdkCellDef="let row" class="example-cell"><a routerLink="{{row.id}}"> {{row.name}}</a> </cdk-cell>
+  <cdk-cell *cdkCellDef="let row" class="example-cell"><a> {{row.name}}</a> </cdk-cell>
   <!-- routerLink="/products/detail/{{row.id}}" -->
 </ng-container>
 
@@ -49,7 +52,7 @@
       
   
       <cdk-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></cdk-header-row>
-      <cdk-row *cdkRowDef="let row; columns: displayedColumns;"  class="example-row"></cdk-row>
+      <cdk-row *cdkRowDef="let row; columns: displayedColumns;" (click)="selectProduct(row)"  class="example-row"></cdk-row>
     </cdk-table>
   </div>
   

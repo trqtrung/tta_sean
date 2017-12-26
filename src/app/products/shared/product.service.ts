@@ -22,6 +22,8 @@ const httpOptions = {
 @Injectable()
 export class ProductService{
     private productUrl = 'http://localhost:3000/products';
+
+    private productApiUrl = 'http://localhost:3000/products/s/';
     
     constructor(
         private http: HttpClient,
@@ -35,6 +37,17 @@ export class ProductService{
         return this.http.get<Product[]>(url)
         .map(res => (res as Product[]));
         
+    }
+
+    getProduct(id: number): Observable<Product>{
+      console.log('product service - get product by id')
+      const url = `${this.productApiUrl}${id}`;
+
+      return this.http.get<Product>(url).map(res => (res as Product))
+      .pipe(
+          tap(hero =>this.log(`fetched product id=${id}`)),
+          catchError(this.handleError<Product>(`getProduct id=${id}`))
+      );
     }
 
     addProduct (product:Product): Observable<Product>{

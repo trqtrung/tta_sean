@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import {DataSource} from '@angular/cdk/collections';
@@ -36,7 +36,8 @@ export class ProductListComponent implements OnInit{
     product = new Product;
 
     
-    constructor(private productService: ProductService,
+    constructor(private route: ActivatedRoute,
+        private productService: ProductService,
         private location: Location)
         {
             //productService.getProducts().subscribe(data => this.dataChange.next(data));
@@ -51,6 +52,15 @@ export class ProductListComponent implements OnInit{
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
             this.dataSource = new ExampleDataSource(this.exampleDatabase);
+
+            this.getProduct()
+        }
+
+        getProduct(): void{
+            const id = +this.route.snapshot.paramMap.get('id');
+            console.log(`get product by id ${id}`)
+            this.productService.getProduct(id)
+            .subscribe(product => this.product = product);
         }
 
         getProducts(): void {
@@ -84,8 +94,14 @@ export class ProductListComponent implements OnInit{
             this.productService.addProductBySequelize(this.product).subscribe();
         }
 
-        selectRow(row){
-            console.log(row)
+        selectProduct(row){
+            console.log(row);
+            this.product.id = row.id;
+            this.product.name = row.name;
+
+            var price = row.price;
+
+            this.product.price = row.price;
         }
         
         clear(): void{
