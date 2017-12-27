@@ -64,9 +64,20 @@ export class ProductService{
 
         console.log('add product by sequelize called in product service');
         return this.http.post<Product>(url, product, httpOptions).pipe(
-          tap((product: Product) => this.log(`added product w/ id=${product.name}`)),
+          tap((product: Product) => this.log(`added product ${product.name}`)),
           catchError(this.handleError<Product>('addProductSequelize'))
         );
+      }
+
+      updateProduct(product:Product):Observable<Product>{
+        const url = `${this.productUrl}/s/`
+
+        console.log('update product')
+
+        return this.http.put<Product>(url, product, httpOptions).pipe(
+          tap((product: Product) => this.log(`updated product ${product.name}`)),
+          catchError(this.handleError<Product>('updateProductSequelize'))
+        )
       }
 
         /**

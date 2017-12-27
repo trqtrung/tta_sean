@@ -91,7 +91,14 @@ export class ProductListComponent implements OnInit{
         save_sequlize(): void{
             console.log('save with sequelize');
 
-            this.productService.addProductBySequelize(this.product).subscribe();
+            if(this.product.id > 0)
+            {
+                this.productService.updateProduct(this.product).subscribe();
+            }
+            else
+            {
+                this.productService.addProductBySequelize(this.product).subscribe();
+            }
         }
 
         selectProduct(row){
@@ -102,11 +109,14 @@ export class ProductListComponent implements OnInit{
             var price = row.price;
 
             this.product.price = row.price;
+
+            
         }
         
         clear(): void{
             this.product.name = '';
             this.product.price = 0;
+            this.product.id = 0;
         }
 }
   
