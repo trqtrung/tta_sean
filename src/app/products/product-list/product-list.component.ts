@@ -53,7 +53,7 @@ export class ProductListComponent implements OnInit{
 
             this.dataSource = new ExampleDataSource(this.exampleDatabase);
 
-            this.getProduct()
+            //this.getProduct()
         }
 
         getProduct(): void{
