@@ -34,8 +34,11 @@ export class ProductService{
     getProducts(): Observable<Product[]>{
         console.log('get all products');
         const url = `${this.productUrl}/all`;
-        return this.http.get<Product[]>(url)
-        .map(res => (res as Product[]));
+        return this.http.get<Product[]>(url).map(res => (res as Product[]))
+        .pipe(
+          tap(hero =>this.log(`fetched products list`)),
+          catchError(this.handleError<Product[]>(`get Products error`))
+      );
         
     }
 
