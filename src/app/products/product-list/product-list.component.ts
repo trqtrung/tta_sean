@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit{
     //selectedHero: Hero;
     public displayedColumns = ['productId', 'productName', 'price'];
     public exampleDatabase : ExampleDatabase | null;
-    public dataSource: ExampleDataSource | null;
+    public dataSource: MatTableDataSource(null);// | null;
 
     products: Product[];
     product = new Product;
@@ -40,7 +40,6 @@ export class ProductListComponent implements OnInit{
         private productService: ProductService,
         private location: Location)
         {
-            //productService.getProducts().subscribe(data => this.dataChange.next(data));
 
         }
         
@@ -51,7 +50,7 @@ export class ProductListComponent implements OnInit{
 
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
-            this.dataSource = new ExampleDataSource(this.exampleDatabase);
+            this.dataSource = new MatTableDataSource(this.exampleDatabase);
 
             //this.getProduct()
         }
@@ -81,10 +80,6 @@ export class ProductListComponent implements OnInit{
 
             this.productService.addProduct(this.product).subscribe();
             
-
-            //this.exampleDatabase = new ExampleDatabase(this.productService);
-            //this.dataSource = new ExampleDataSource(this.exampleDatabase);
-
             this.clear();
         }
 
@@ -108,9 +103,7 @@ export class ProductListComponent implements OnInit{
 
             var price = row.price;
 
-            this.product.price = row.price;
-
-            
+            this.product.price = row.price;          
         }
         
         clear(): void{
@@ -118,20 +111,14 @@ export class ProductListComponent implements OnInit{
             this.product.price = 0;
             this.product.id = 0;
         }
+
+        applyFilter(filterValue: string) {
+            filterValue = filterValue.trim(); // Remove whitespace
+            filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+            this.dataSource.filter = filterValue;
+          }
 }
   
-  /** Constants used to fill up our data base. */
-//   const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-//     'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-//   const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-//     'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-//     'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-  
-//   export interface UserData {
-//     id: string;
-//     name: string;
-//     price: string;
-//   }
   
 //   /** An example database that the data source uses to retrieve data for the table. */
   export class ExampleDatabase {
