@@ -4,7 +4,7 @@
   }
   
   .example-container > * {
-    width: 30%;
+    width: 80%;
     margin-left: 50px;
   }
 
@@ -50,4 +50,8 @@
 .example-cell {
   font-size: 13px;
   color: rgba(0, 0, 0, 0.87);
+}
+
+.button-row{
+  display: block;
 }

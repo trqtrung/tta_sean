@@ -23,37 +23,42 @@ import { ProductService } from '../shared/product.service';
     styleUrls: ['./product-list.component.css'],
     providers: [ProductService]
 })
+ 
 
 export class ProductListComponent implements OnInit{
     
-    //remove because using routing
-    //selectedHero: Hero;
-    public displayedColumns = ['productId', 'productName', 'price'];
-    public exampleDatabase : ExampleDatabase | null;
-    public dataSource: ExampleDataSource | null;
-
     products: Product[];
     product = new Product;
 
-    
+    productData: Product[] = [];
+
+    prodata: Observable<Product[]>;
+
+    public displayedColumns = ['productId', 'productName', 'price'];
+    public exampleDatabase : ExampleDatabase | null;
+    public dataSource: ExampleDataSource | null;
+    //public dataSource = new MatTableDataSource(this.productData);
+        
     constructor(private route: ActivatedRoute,
         private productService: ProductService,
         private location: Location)
         {
-            //productService.getProducts().subscribe(data => this.dataChange.next(data));
 
         }
         
     
         ngOnInit(){
-            //this.title = 'Products';
+
+            //this.getProductsData();
             //this.getProducts();
+
+            //this.productData = this.getProductsData();
 
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
             this.dataSource = new ExampleDataSource(this.exampleDatabase);
-
-            //this.getProduct()
+            //this.dataSource = new MatTableDataSource(this.productData);
+            
         }
 
         getProduct(): void{
@@ -70,6 +75,22 @@ export class ProductListComponent implements OnInit{
             //use observable
             this.productService.getProducts()
             .subscribe(products => this.products = products);
+
+            console.log('get products' +this.products);
+        }
+
+        getProductsData(): Product[] {
+            //old code
+            //this.heroes = this.heroService.getHeroes();
+            //var data: Product[];
+            //use observable
+            this.productService.getProducts().subscribe(products => this.productData = products);
+
+            console.log(this.productData);
+
+            return this.productData;
+
+            
         }
 
         goBack(): void {
@@ -81,17 +102,39 @@ export class ProductListComponent implements OnInit{
 
             this.productService.addProduct(this.product).subscribe();
             
-
-            //this.exampleDatabase = new ExampleDatabase(this.productService);
-            //this.dataSource = new ExampleDataSource(this.exampleDatabase);
-
             this.clear();
         }
 
         save_sequlize(): void{
             console.log('save with sequelize');
 
-            this.productService.addProductBySequelize(this.product).subscribe();
+            let name = this.product.name.trim();
+
+            if(!name)
+            {
+                console.log('Product Name is blank');
+                return;
+            }
+
+            let price = this.product.price;
+
+            if(price < 1)
+            {
+                console.log('Please insert Product Price');
+                return;
+            }
+
+            if(this.product.id > 0)
+            {
+                this.productService.updateProduct(this.product).subscribe(result =>{
+                   this.refreshProductsTable();
+                });              
+            }
+            else
+            {
+                this.productService.addProductBySequelize(this.product).subscribe();
+                this.refreshProductsTable();
+            }
         }
 
         selectProduct(row){
@@ -101,27 +144,33 @@ export class ProductListComponent implements OnInit{
 
             var price = row.price;
 
-            this.product.price = row.price;
+            this.product.price = row.price;          
         }
+
+        isValid(){
+            return true;
+        }
+        
+
         
         clear(): void{
             this.product.name = '';
             this.product.price = 0;
+            this.product.id = 0;
         }
+
+        applyFilter(filterValue: string) {
+            filterValue = filterValue.trim(); // Remove whitespace
+            filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+            //this.dataSource.filter = filterValue;
+          }
+
+    refreshProductsTable(): void{
+        this.exampleDatabase = new ExampleDatabase(this.productService);
+        this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    }
 }
   
-  /** Constants used to fill up our data base. */
-//   const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-//     'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-//   const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-//     'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-//     'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-  
-//   export interface UserData {
-//     id: string;
-//     name: string;
-//     price: string;
-//   }
   
 //   /** An example database that the data source uses to retrieve data for the table. */
   export class ExampleDatabase {
@@ -136,6 +185,19 @@ constructor(private productService: ProductService)
         productService.getProducts().subscribe(data => this.dataChange.next(data));
     }
   }
+
+export interface ProductInterface{
+    items: Product[];
+    total_count: number;
+}
+
+//   export class ExampleHttpDao{
+//       constructor(private productService: ProductService){}
+
+//       getProducts(sort: string, order: string, page: number):Observable<ProductInterface>{
+//           return this.productService.getProducts.subscribe(products => this.productData = products);
+//       }
+//   }
   
   /**
    * Data source to provide what data should be rendered in the table. Note that the data source
@@ -164,8 +226,7 @@ return Observable.merge(...displayDataChanges).map(()=>{
   
     disconnect() {}
 }
-  
-  
+
   /**  Copyright 2017 Google Inc. All Rights Reserved.
       Use of this source code is governed by an MIT-style license that
       can be found in the LICENSE file at http://angular.io/license */

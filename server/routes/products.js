@@ -15,7 +15,7 @@ const sproduct = require('../models/product');
 router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET", "POST" , "PUT");
+    res.header("Access-Control-Allow-Methods", "GET","PUT","POST");
     next();
   });
 
@@ -108,6 +108,34 @@ router.post('/s/',function(req,res){
         res.send(JSON.stringify({messeage:error}));
     });
 });
+
+router.put('/s/',function(req, res){
+
+    const updateProduct = sproduct.build({
+        id: req.body.id,
+        name: req.body.name,
+        price: req.body.price
+    });
+
+
+    // updateProduct.save().then(pro =>{
+    //     res.send(pro.get('name') + ' has been updated via sequelize');
+    // }).catch(error =>{
+    //     res.send(JSON.stringify({messeage:error}));
+    // });
+
+    sproduct.update({
+        name: updateProduct.name,
+        price: updateProduct.price
+    },{
+        where:{
+            id: updateProduct.id
+        }
+    }).then(something => {
+        res.json('updated product');
+        console.log('updated');
+    });
+})
 
 router.delete('/s/:id', (req,res) => {
 

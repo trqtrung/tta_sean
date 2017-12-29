@@ -1,8 +1,46 @@
-<h1>{{title}}</h1>
-<nav>
-  <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/heroes">Heroes</a>
-  <a routerLink="/products">Products</a>
-</nav>
-<router-outlet></router-outlet>
-<app-messages></app-messages>
+
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="side" opened="true">
+    <mat-toolbar color="basic">
+    <mat-toolbar-row>
+        <span><h3>{{title}}</h3></span>
+    </mat-toolbar-row>
+      
+      <mat-toolbar-row>
+        <span><a routerLink="/dashboard">Dashboard</a></span>
+        <span class="example-spacer"></span>
+      </mat-toolbar-row>
+      <mat-toolbar-row>
+          <span><a routerLink="/heroes">Heroes</a></span>
+          <span class="example-spacer"></span>
+        </mat-toolbar-row>
+        <mat-toolbar-row>
+            <span><a routerLink="/products">Products</a></span>
+            <span class="example-spacer"></span>
+          </mat-toolbar-row>
+    </mat-toolbar>
+    <nav>
+      <h3>Products</h3>
+      <ul>
+          <li>
+              <a routerLink="/products">Products list</a>
+          </li>
+          <li>
+            Shit!
+          </li>
+      </ul>    
+    </nav>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <nav>
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/heroes">Heroes</a>
+      <a routerLink="/products">Products</a>
+    </nav>
+    <router-outlet></router-outlet>
+    <app-messages></app-messages>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

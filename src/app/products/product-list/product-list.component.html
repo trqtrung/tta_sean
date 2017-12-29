@@ -1,60 +1,94 @@
 
 <h3>Product List</h3>
-<div class="example-container">
-    <mat-form-field>
-        <input [(ngModel)]="product.id" matInput placeholder="ID" readonly>
-      </mat-form-field>
-    <mat-form-field>
-      <input [(ngModel)]="product.name" required matInput placeholder="Name">
-    </mat-form-field>
-  
-    <mat-form-field>
-        <input matInput [(ngModel)]="product.price" required type="number" class="right-align"  placeholder="Price">
-        <span matPrefix>$&nbsp;</span>
-      </mat-form-field>
-  
 
-        <button mat-button color="primary" (click)="save()">Create</button>
-      <button mat-button color="default" (click)="save_sequlize()">Create with Sequelize</button>
-  </div>
+<!-- <mat-grid-list cols="2" rowHeight="500px">
+  <mat-grid-tile>-->
 
-  <!-- <ul class="products">
-    <li *ngFor="let product of products">
-      <span class="badge">{{product.id}}</span> {{product.name}} - {{product.price}}
-    </li>
-  </ul> -->
+    <div>
+      <div style="width:50%; float:left;">
+          <div class="example-container">
+              <mat-form-field>
+                  <input [(ngModel)]="product.id" matInput placeholder="ID" readonly>
+                </mat-form-field>
+              <mat-form-field>
+                <input [(ngModel)]="product.name" required matInput placeholder="Name">
+              </mat-form-field>
+            
+              <mat-form-field>
+                  <input matInput [(ngModel)]="product.price" required type="number" class="right-align"  placeholder="Price">
+                  <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            
+                <div class="button-row">
+ <!-- <button mat-button color="primary" (click)="save()">Create</button> -->
+ <button mat-button color="primary" [disabled]="!isValid()" mat-raised-button (click)="save_sequlize()">Save</button>
+ <button mat-button color="basic" (click)="clear()">Clear</button>
+ <button mat-raised-button (click)="delete()" color="warn">Delete</button>
+                </div>
+          
+                 
+            </div>
+      </div>
+      <div style="width:50%; float:left;">
+          <div class="example-container mat-elevation-z8">
+              <div class="example-header">
+                  <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                  </mat-form-field>
+                </div>
 
-  <div class="example-container mat-elevation-z8">
-    <cdk-table #table [dataSource]="dataSource" class="example-table">
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-  
-      <!-- ID Column -->
-      <ng-container cdkColumnDef="productId">
-        <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> ID </cdk-header-cell>
-        <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.id}} </cdk-cell>
-      </ng-container>
-  
-<!-- Name Column -->
+              <cdk-table #table [dataSource]="dataSource" class="example-table">
+                <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+            
+                <!-- ID Column -->
+                <ng-container cdkColumnDef="productId">
+                  <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> ID </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.id}} </cdk-cell>
+                </ng-container>
+            
+          <!-- Name Column -->
+          
+          <ng-container cdkColumnDef="productName">
+            <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Name </cdk-header-cell>
+            <cdk-cell *cdkCellDef="let row" class="example-cell"><a> {{row.name}}</a> </cdk-cell>
+            <!-- routerLink="/products/detail/{{row.id}}" -->
+          </ng-container>
+          
+                <!-- Progress Column -->
+                <ng-container cdkColumnDef="price">
+                  <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Price </cdk-header-cell>
+                  <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.price | number}} vnd</cdk-cell>
+                </ng-container>
+            
+                
+            
+                <cdk-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></cdk-header-row>
+                <cdk-row *cdkRowDef="let row; columns: displayedColumns;" (click)="selectProduct(row)"  class="example-row"></cdk-row>
+              </cdk-table>
+            </div>
+      </div>
+    </div>
 
-<ng-container cdkColumnDef="productName">
-  <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Name </cdk-header-cell>
-  <cdk-cell *cdkCellDef="let row" class="example-cell"><a> {{row.name}}</a> </cdk-cell>
-  <!-- routerLink="/products/detail/{{row.id}}" -->
-</ng-container>
-
-      <!-- Progress Column -->
-      <ng-container cdkColumnDef="price">
-        <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Price </cdk-header-cell>
-        <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.price | number}} vnd</cdk-cell>
-      </ng-container>
-  
       
+
+      
+
+
+
+    
+
+  <!-- </mat-grid-tile>
+  <mat-grid-tile> -->
+
+
   
-      <cdk-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></cdk-header-row>
-      <cdk-row *cdkRowDef="let row; columns: displayedColumns;" (click)="selectProduct(row)"  class="example-row"></cdk-row>
-    </cdk-table>
-  </div>
+  <!-- </mat-grid-tile>
+</mat-grid-list> -->
+
+
+
+  
   
   
   <!-- Copyright 2017 Google Inc. All Rights Reserved.
