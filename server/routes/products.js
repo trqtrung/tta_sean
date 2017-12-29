@@ -109,20 +109,33 @@ router.post('/s/',function(req,res){
     });
 });
 
-// router.put('/s/',function(req, res){
+router.put('/s/',function(req, res){
 
-//     const updateProduct = sproduct.build({
-//         id: req.body.id,
-//         name: req.body.name,
-//         price: req.body.price
-//     });
+    const updateProduct = sproduct.build({
+        id: req.body.id,
+        name: req.body.name,
+        price: req.body.price
+    });
 
-//     updateProduct.save().then(pro =>{
-//         res.send(pro.get('name') + ' has been updated via sequelize');
-//     }).catch(error =>{
-//         res.send(JSON.stringify({messeage:error}));
-//     });
-// })
+
+    // updateProduct.save().then(pro =>{
+    //     res.send(pro.get('name') + ' has been updated via sequelize');
+    // }).catch(error =>{
+    //     res.send(JSON.stringify({messeage:error}));
+    // });
+
+    sproduct.update({
+        name: updateProduct.name,
+        price: updateProduct.price
+    },{
+        where:{
+            id: updateProduct.id
+        }
+    }).then(something => {
+        res.json('updated product');
+        console.log('updated');
+    });
+})
 
 router.delete('/s/:id', (req,res) => {
 
