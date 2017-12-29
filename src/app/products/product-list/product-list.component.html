@@ -19,10 +19,14 @@
                   <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
             
+                <div class="button-row">
+ <!-- <button mat-button color="primary" (click)="save()">Create</button> -->
+ <button mat-button color="primary" [disabled]="!isValid()" mat-raised-button (click)="save_sequlize()">Save</button>
+ <button mat-button color="basic" (click)="clear()">Clear</button>
+ <button mat-raised-button (click)="delete()" color="warn">Delete</button>
+                </div>
           
-                  <!-- <button mat-button color="primary" (click)="save()">Create</button> -->
-                <button mat-button color="warn" (click)="save_sequlize()">Save</button>
-                <button mat-button color="basic" (click)="clear()">Clear</button>
+                 
             </div>
       </div>
       <div style="width:50%; float:left;">

@@ -50,9 +50,9 @@ export class ProductListComponent implements OnInit{
         ngOnInit(){
 
             //this.getProductsData();
-            this.getProducts();
+            //this.getProducts();
 
-            this.productData = this.getProductsData();
+            //this.productData = this.getProductsData();
 
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
@@ -108,17 +108,32 @@ export class ProductListComponent implements OnInit{
         save_sequlize(): void{
             console.log('save with sequelize');
 
+            let name = this.product.name.trim();
+
+            if(!name)
+            {
+                console.log('Product Name is blank');
+                return;
+            }
+
+            let price = this.product.price;
+
+            if(price < 1)
+            {
+                console.log('Please insert Product Price');
+                return;
+            }
+
             if(this.product.id > 0)
             {
-                this.productService.updateProduct(this.product).subscribe();
-
-                
+                this.productService.updateProduct(this.product).subscribe(result =>{
+                   this.refreshProductsTable();
+                });              
             }
             else
             {
                 this.productService.addProductBySequelize(this.product).subscribe();
-
-                this.productData.push(this.product);
+                this.refreshProductsTable();
             }
         }
 
@@ -131,6 +146,12 @@ export class ProductListComponent implements OnInit{
 
             this.product.price = row.price;          
         }
+
+        isValid(){
+            return true;
+        }
+        
+
         
         clear(): void{
             this.product.name = '';
@@ -143,6 +164,11 @@ export class ProductListComponent implements OnInit{
             filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
             //this.dataSource.filter = filterValue;
           }
+
+    refreshProductsTable(): void{
+        this.exampleDatabase = new ExampleDatabase(this.productService);
+        this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    }
 }
   
   
