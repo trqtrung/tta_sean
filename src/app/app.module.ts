@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {LayoutModule} from '@angular/cdk/layout';
 import {FormsModule} from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 
@@ -16,6 +17,7 @@ import { HeroSearchComponent} from './heroes/hero-search/hero-search.component';
 
 import { ProductService} from './products/shared/product.service';
 import { ProductListComponent} from './products/product-list/product-list.component';
+import {ProductTypeComponent} from './products/product-type/product-type.component';
 
 import {MessageService } from './messages/message.service';
 import {MessagesComponent} from './messages/messages.component';
@@ -35,20 +37,15 @@ import { MaterialModule} from './shared/material.module';
     HeroDetailComponent,
     HeroSearchComponent,
     MessagesComponent,
-    ProductListComponent
+    ProductListComponent,
+    ProductTypeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    LayoutModule,
     AppRoutingModule,
     HttpClientModule,
-    
-    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
-    // and returns simulated server responses.
-    // Remove it when a real server is ready to receive requests.
-    // HttpClientInMemoryWebApiModule.forRoot(
-    //   InMemoryDataService, { dataEncapsulation: false }
-    // )
     BrowserAnimationsModule,
     MaterialModule
   ],

@@ -13,6 +13,7 @@ import { of } from 'rxjs/observable/of';
 import { Product } from '../shared/product.model';
 //import {HEROES} from './mock-heroes';
 import { ProductService } from '../shared/product.service';
+import { element } from 'protractor';
 
 
 //import {MessageService} from '../messages/message.service';
@@ -168,6 +169,16 @@ export class ProductListComponent implements OnInit{
     refreshProductsTable(): void{
         this.exampleDatabase = new ExampleDatabase(this.productService);
         this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    }
+
+    delete(): void{
+        if(this.product.id > 0)
+        {
+
+        }
+        else{
+            
+        }
     }
 }
   

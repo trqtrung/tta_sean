@@ -19,7 +19,13 @@ const Product = sequelize.define('products',{
         }
     },
     price:{
-        type: Sequelize.DECIMAL(10, 2) 
+        type: Sequelize.DECIMAL(10, 2),
+        validate:{
+            min: {
+                args: [1],
+            msg:'Please insert Product Price'
+            }
+        } 
     }    
 },
 {

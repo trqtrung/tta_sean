@@ -8,13 +8,16 @@ import { DashboardComponent }   from '../dashboard/dashboard.component';
 
 import { ProductListComponent} from '../products/product-list/product-list.component';
 
+import {ProductTypeComponent} from '../products/product-type/product-type.component';
+
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'heroes', component: HeroesComponent },
     { path: 'detail/:id', component: HeroDetailComponent },
     { path: 'dashboard', component: DashboardComponent },
     {path: 'products', component: ProductListComponent},
-    {path: 'products/detail/:id', component: ProductListComponent}
+    {path: 'products/detail/:id', component: ProductListComponent},
+    {path: 'product_type', component: ProductTypeComponent}
   ];
 
 @NgModule({

@@ -14,6 +14,9 @@ app.use('/products', products);
 const api = require('./server/routes/api');
 app.use('/api', api);
 
+const options = require('./server/routes/optionslists');
+app.use('/optionslists',options);
+
 // const sequelize = require('./server/routes/sequelize');
 // app.use('/sequelize',sequelize);
 

@@ -105,7 +105,7 @@ router.post('/s/',function(req,res){
     newproduct.save().then(pro =>{
         res.send(pro.get('name') + ' has been created via sequelize');
     }).catch(error =>{
-        res.send(JSON.stringify({messeage:error}));
+        res.json(error);
     });
 });
 
