@@ -22,6 +22,8 @@ import {ProductTypeComponent} from './products/product-type/product-type.compone
 import {MessageService } from './messages/message.service';
 import {MessagesComponent} from './messages/messages.component';
 
+import { OptionListService } from './options_lists/optionlist.service';
+
 import {AppRoutingModule} from './shared/app-routing.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
@@ -49,7 +51,7 @@ import { MaterialModule} from './shared/material.module';
     BrowserAnimationsModule,
     MaterialModule
   ],
-  providers: [HeroService, MessageService, ProductService],
+  providers: [HeroService, MessageService, ProductService, OptionListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,26 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ProductService } from '../shared/product.service';
-import { ProductInterface } from '../product-list/product-list.component';
+import { OptionListService } from '../../options_lists/optionlist.service';
+import { OptionList } from '../../options_lists/optionlist.model';
 
 @Component({
     selector: 'app-product-type',
     templateUrl: './product-type.component.html',
     styleUrls: ['./product-type.component.css'],
-    providers: [ProductService]
+    //providers: [ProductService]
 })
 
 export class ProductTypeComponent implements OnInit{
-    productType: ProductInterface;
+    productType: OptionList;
+
+    constructor(private route: ActivatedRoute,
+        private optionListService: OptionListService)
+        {
+
+        }
 
     ngOnInit(){
 
     }
-}
 
-export interface ProductTypeInterface{
-    id: number
-    name: string;
-    key: string;
+    save(): void{
+        console.log('pressed save product type')
+
+        this.optionListService.add(this.productType).subscribe(result => {console.log("success")});
+
+        this.productType.name = '';
+        this.productType.value = '';
+    }
 }
