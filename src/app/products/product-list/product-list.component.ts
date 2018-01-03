@@ -11,9 +11,14 @@ import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
 
 import { Product } from '../shared/product.model';
-//import {HEROES} from './mock-heroes';
+
 import { ProductService } from '../shared/product.service';
-import { element } from 'protractor';
+
+import { OptionList } from '../../options_lists/optionlist.model';
+
+import { OptionListService } from '../../options_lists/optionlist.service';
+
+//import { element } from 'protractor';
 
 
 //import {MessageService} from '../messages/message.service';
@@ -35,16 +40,22 @@ export class ProductListComponent implements OnInit{
 
     prodata: Observable<Product[]>;
 
-    public displayedColumns = ['productId', 'productName', 'price'];
+    types: OptionList[];
+
+
+    public displayedColumns = ['productId', 'productName', 'productType', 'price'];
     public exampleDatabase : ExampleDatabase | null;
     public dataSource: ExampleDataSource | null;
     //public dataSource = new MatTableDataSource(this.productData);
         
     constructor(private route: ActivatedRoute,
         private productService: ProductService,
+        private optionListService: OptionListService,
         private location: Location)
         {
-
+            this.optionListService.getByKey('product.type').subscribe(t => {
+                this.types = t as OptionList[]
+            });
         }
         
     
@@ -89,9 +100,7 @@ export class ProductListComponent implements OnInit{
 
             console.log(this.productData);
 
-            return this.productData;
-
-            
+            return this.productData;            
         }
 
         goBack(): void {
@@ -100,7 +109,7 @@ export class ProductListComponent implements OnInit{
 
         save(): void{
             console.log(`pressed save ${this.product}`);
-
+            
             this.productService.addProduct(this.product).subscribe();
             
             this.clear();
@@ -179,6 +188,10 @@ export class ProductListComponent implements OnInit{
         else{
             
         }
+    }
+
+    getTypes(){
+        return this.optionListService.getByKey('product.type').subscribe()
     }
 }
   

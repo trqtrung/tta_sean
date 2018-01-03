@@ -2,7 +2,7 @@ export class Product{
     id: number;
     name: string;
     price: number;
-    //category: number;
+    type: number;
     constructor(
         
         ){}  

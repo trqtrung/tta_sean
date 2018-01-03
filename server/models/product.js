@@ -26,6 +26,10 @@ const Product = sequelize.define('products',{
             msg:'Please insert Product Price'
             }
         } 
+    },
+    type:{
+        type: Sequelize.INTEGER,
+        allowNull: true
     }    
 },
 {

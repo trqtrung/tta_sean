@@ -21,14 +21,25 @@ export class ProductTypeComponent implements OnInit{
         }
 
     ngOnInit(){
-
+        this.productType = new OptionList
     }
 
     save(): void{
+        if(this.productType.name === '' || !this.productType.name)
+        {
+            alert('please insert name')
+            return
+        }
+
         console.log('pressed save product type')
+        this.productType.key = 'product.type'
+        this.optionListService.add(this.productType).subscribe(result => {console.log("success")})
 
-        this.optionListService.add(this.productType).subscribe(result => {console.log("success")});
+        this.productType.name = ''
+        this.productType.value = ''
+    }
 
+    clear(): void{
         this.productType.name = '';
         this.productType.value = '';
     }

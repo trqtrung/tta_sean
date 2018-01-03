@@ -18,6 +18,7 @@ const sequelize = new Sequelize('tta', 'root', 'trung1992',{
 });
 
 // Sync all models that aren't already in the database
+console.log('sync sequelize')
 sequelize.sync();
 
 // Force sync all models

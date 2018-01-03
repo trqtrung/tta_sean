@@ -39,6 +39,17 @@ export class OptionListService{
           );
       }
 
+      getByKey(key: string): Observable<OptionList[]>{
+        console.log('get opt by key');
+        const url = `${this.apiUrl}key/${key}`;
+        return this.http.get<OptionList[]>(url).map(res => (res as OptionList[]))
+        .pipe(
+          tap(retult =>console.log(`fetched options list`)),
+          catchError(this.handleError<OptionList[]>(`get options list error`))
+      );
+        
+    }
+
       private handleError<T> (operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
      

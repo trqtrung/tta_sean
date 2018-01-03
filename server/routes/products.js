@@ -21,7 +21,7 @@ router.use(function(req, res, next) {
 
 router.get('/all', function(req, res){
 
-    conn.query('SELECT id, name, price FROM products', function(err, rows, fields){
+    conn.query('SELECT id, name, price, type FROM products', function(err, rows, fields){
         if(err) throw err
 
         console.log(rows);
@@ -99,7 +99,8 @@ router.post('/s/',function(req,res){
 
     const newproduct = sproduct.build({
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        type: req.body.type
     });
 
     newproduct.save().then(pro =>{
@@ -114,7 +115,8 @@ router.put('/s/',function(req, res){
     const updateProduct = sproduct.build({
         id: req.body.id,
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        type: req.body.type
     });
 
 
@@ -126,7 +128,8 @@ router.put('/s/',function(req, res){
 
     sproduct.update({
         name: updateProduct.name,
-        price: updateProduct.price
+        price: updateProduct.price,
+        type: updateProduct.type
     },{
         where:{
             id: updateProduct.id

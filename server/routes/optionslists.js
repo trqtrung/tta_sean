@@ -5,6 +5,15 @@ var router = express.Router();
 
 const option = require('../models/optionlist');
 
+router.get('/',function(req,res){
+
+    option.findAll({
+        order: [['name','ASC']]
+    }).then(opt =>{
+        res.json(opt);
+    });
+});
+
 router.get('/key/:key',function(req,res){
     var key = req.param('key');
 
@@ -15,6 +24,14 @@ router.get('/key/:key',function(req,res){
         res.json(opt);
     });
 });
+
+router.get('/:id', function(req, res){
+    const id = req.param('id')
+
+    option.findById(id).then(opt => {
+        res.json(opt)
+    })
+})
 
 router.post('/',function(req,res){
 
