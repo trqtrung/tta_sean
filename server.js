@@ -17,6 +17,9 @@ app.use('/api', api);
 const options = require('./server/routes/optionslists');
 app.use('/optionslists',options);
 
+const users = require('./server/routes/users');
+app.use('/users',users);
+
 // const sequelize = require('./server/routes/sequelize');
 // app.use('/sequelize',sequelize);
 
