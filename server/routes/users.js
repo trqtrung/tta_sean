@@ -62,20 +62,22 @@ router.post('/login',function(req,res){
 
     console.log('login ');
 
-    var userHash = getUserHash(username);
+    var isOk = false;
+
+    const userHash = getUserHash(username);
 
     console.log(userHash);
 
-    if(userHash != '')
+    if(userHash.hash != '')
     {
-        bcrypt.compare(password, userHash, function(err, res) {
-            if(res) {
+        bcrypt.compare(password, userHash.hash, function(err, result) {
+            if(result) {
              // Passwords match
-             console.log('password matched')
+             console.log('password matched '+userHash.hash)
              res.json('logged')
             } else {
              // Passwords don't match
-             console.log('passwords are not match')
+             console.log('passwords are not match '+userHash.hash)
              res.json('error')
             } 
           });
@@ -86,15 +88,14 @@ router.post('/login',function(req,res){
     }
 });
 
-function getUserHash(username)
+var getUserHash = function(username)
 {
+    console.log('get user hash called')
+
     var hash='';
 
-    user.findOne({where: {username: username}}).then(u =>{
-        hash = u.hash
-        console.log('hash: ' + u.hash);
-    })
-    console.log('_hash: ' + hash);
+    return user.findOne({where: {username: username}})
+    //console.log('_hash: ' + hash);
     return hash;
 }
 
