@@ -55,48 +55,46 @@ router.post('/',function(req,res){
 });
 
 router.post('/login',function(req,res){
-
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
-
-    console.log('login ');
-
-    var isOk = false;
-
-    const userHash = getUserHash(username);
-
-    console.log(userHash);
-
-    if(userHash.hash != '')
+    try
     {
-        bcrypt.compare(password, userHash.hash, function(err, result) {
-            if(result) {
-             // Passwords match
-             console.log('password matched '+userHash.hash)
-             res.json('logged')
-            } else {
-             // Passwords don't match
-             console.log('passwords are not match '+userHash.hash)
-             res.json('error')
-            } 
-          });
+        const username = req.body.username;
+        const password = req.body.password;
+        const email = req.body.email;
+
+        console.log('login ');
+
+        user.findOne({attributes:['hash'], where: {username: username}}).then(u =>{
+            if(u)
+            {
+                if(u.hash)
+                {
+                    bcrypt.compare(password, u.hash, function(err, result) {
+                        if(result) {
+                            // Passwords match
+                            console.log('password matched '+u.hash)
+                            res.json('logged')
+                        } else {
+                            // Passwords are not match
+                            console.log('passwords are not match '+u.hash)
+                            res.json('password does not match')
+                        } 
+                    });
+                }
+                else
+                {
+                    res.json(username + ' does not exist');
+                }
+            }
+            else
+            {
+                res.json(username + ' does not exist');
+            }
+        })
     }
-    else
+    catch(e)
     {
-        res.json(username + ' does not exist');
-    }
-});
-
-var getUserHash = function(username)
-{
-    console.log('get user hash called')
-
-    var hash='';
-
-    return user.findOne({where: {username: username}})
-    //console.log('_hash: ' + hash);
-    return hash;
-}
+        
+    }  
+})
 
 module.exports = router;
