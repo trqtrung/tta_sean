@@ -23,35 +23,33 @@ router.get('/:id', function(req, res){
     })
 })
 
-router.post('/',function(req,res){
+router.post('/', function (req, res) {
 
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
-    var hash= '';
+    var hash = '';
 
-    bcrypt.hash(password, 10, function(err, hash) {
+    bcrypt.hash(password, 10, function (err, hash) {
         // Store hash in database
-        if(hash)
-        {
+        if (hash) {
             console.log(hash)
 
-        user.create({
-            username: username,
-            password: password,
-            email: email,
-            hash: hash
-        }).then(u =>{ 
-            res.json(u.get())
-        }).catch(err => {
-            res.json(JSON.stringify({message: err}))
-        })
-    }
-    else
-    {
-        console.log(err)
-    }
-      });
+            user.create({
+                username: username,
+                password: password,
+                email: email,
+                hash: hash
+            }).then(u => {
+                res.json(u.get())
+            }).catch(err => {
+                res.json(JSON.stringify({ message: err }))
+            })
+        }
+        else {
+            console.log(err)
+        }
+    });
 });
 
 router.post('/login',function(req,res){
@@ -76,17 +74,20 @@ router.post('/login',function(req,res){
                         } else {
                             // Passwords are not match
                             console.log('passwords are not match '+u.hash)
+                            res.status(400)
                             res.json('password does not match')
                         } 
                     });
                 }
                 else
                 {
+                    res.status(400)
                     res.json(username + ' does not exist');
                 }
             }
             else
             {
+                res.status(400)
                 res.json(username + ' does not exist');
             }
         })

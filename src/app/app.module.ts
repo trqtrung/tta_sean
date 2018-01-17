@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {LayoutModule} from '@angular/cdk/layout';
 import {FormsModule} from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 
@@ -24,12 +24,20 @@ import {MessagesComponent} from './messages/messages.component';
 
 import { OptionListService } from './options_lists/optionlist.service';
 
+import { LoginService } from './login/login.service';
+import { LoginComponent } from './login/login.component';
+
 import {AppRoutingModule} from './shared/app-routing.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
-//import { InMemoryDataService} from './in-memory-data.service';
+import { InMemoryDataService} from './in-memory-data.service';
 
 import { MaterialModule} from './shared/material.module';
+
+import { AuthGuard } from './guards/auth.guard';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+
+import { from } from 'rxjs/observable/from';
 
 @NgModule({
   declarations: [
@@ -40,7 +48,8 @@ import { MaterialModule} from './shared/material.module';
     HeroSearchComponent,
     MessagesComponent,
     ProductListComponent,
-    ProductTypeComponent
+    ProductTypeComponent, 
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +60,19 @@ import { MaterialModule} from './shared/material.module';
     BrowserAnimationsModule,
     MaterialModule
   ],
-  providers: [HeroService, MessageService, ProductService, OptionListService],
+  providers: [
+    AuthGuard,
+    HeroService,
+     MessageService,
+      ProductService,
+       OptionListService,
+        LoginService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: JwtInterceptor,
+          multi: true
+        }
+      ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

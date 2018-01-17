@@ -10,6 +10,9 @@ import { ProductListComponent} from '../products/product-list/product-list.compo
 
 import {ProductTypeComponent} from '../products/product-type/product-type.component';
 
+import {LoginComponent} from '../login/login.component';
+import { from } from 'rxjs/observable/from';
+
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'heroes', component: HeroesComponent },
@@ -17,7 +20,8 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     {path: 'products', component: ProductListComponent},
     {path: 'products/detail/:id', component: ProductListComponent},
-    {path: 'product_type', component: ProductTypeComponent}
+    {path: 'product_type', component: ProductTypeComponent},
+    {path: 'login', component: LoginComponent}
   ];
 
 @NgModule({
