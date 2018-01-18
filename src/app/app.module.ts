@@ -2,9 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {LayoutModule} from '@angular/cdk/layout';
 import {FormsModule} from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
-import { HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+//import { HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 
 import { AppComponent } from './app.component';
 
@@ -27,6 +28,8 @@ import { OptionListService } from './options_lists/optionlist.service';
 import { LoginService } from './login/login.service';
 import { LoginComponent } from './login/login.component';
 
+import { AuthenticationService } from './services/authentication.service';
+
 import {AppRoutingModule} from './shared/app-routing.module';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
@@ -35,9 +38,11 @@ import { InMemoryDataService} from './in-memory-data.service';
 import { MaterialModule} from './shared/material.module';
 
 import { AuthGuard } from './guards/auth.guard';
-import { JwtInterceptor } from './helpers/jwt.interceptor';
 
-import { from } from 'rxjs/observable/from';
+import { CustomHttp } from './helpers/custom-http';
+//import { JwtInterceptor } from './helpers/jwt.interceptor';
+
+//import { from } from 'rxjs/observable/from';
 
 @NgModule({
   declarations: [
@@ -56,22 +61,25 @@ import { from } from 'rxjs/observable/from';
     FormsModule,
     LayoutModule,
     AppRoutingModule,
+    HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule
   ],
   providers: [
+    CustomHttp,
     AuthGuard,
     HeroService,
      MessageService,
       ProductService,
        OptionListService,
         LoginService,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: JwtInterceptor,
-          multi: true
-        }
+        AuthenticationService,
+        // {
+        //   provide: HTTP_INTERCEPTORS,
+        //   useClass: JwtInterceptor,
+        //   multi: true
+        // }
       ],
   bootstrap: [AppComponent]
 })

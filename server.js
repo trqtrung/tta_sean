@@ -4,9 +4,25 @@ var app = express();
 var cors = require('cors');
 app.use(cors());
 
+var expressJwt = require('express-jwt');
+var config = require('./server/config/config.json');
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+// use JWT auth to secure the api, the token can be passed in the authorization header or querystring
+app.use(expressJwt({
+  secret: config.secret,
+  getToken: function (req) {
+      if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+          return req.headers.authorization.split(' ')[1];
+      } else if (req.query && req.query.token) {
+          return req.query.token;
+      }
+      return null;
+  }
+}).unless({ path: ['/users/login', '/users/register'] }));//apis do not need to authenticate - allow anonymous
 
 var products = require('./server/routes/products');
 app.use('/products', products);

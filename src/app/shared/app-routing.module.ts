@@ -13,14 +13,16 @@ import {ProductTypeComponent} from '../products/product-type/product-type.compon
 import {LoginComponent} from '../login/login.component';
 import { from } from 'rxjs/observable/from';
 
+import { AuthGuard } from '../guards/auth.guard';
+
 const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'heroes', component: HeroesComponent },
-    { path: 'detail/:id', component: HeroDetailComponent },
-    { path: 'dashboard', component: DashboardComponent },
-    {path: 'products', component: ProductListComponent},
-    {path: 'products/detail/:id', component: ProductListComponent},
-    {path: 'product_type', component: ProductTypeComponent},
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate:[AuthGuard] },
+    { path: 'heroes', component: HeroesComponent, canActivate:[AuthGuard] },
+    { path: 'detail/:id', component: HeroDetailComponent, canActivate:[AuthGuard] },
+    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard] },
+    {path: 'products', component: ProductListComponent, canActivate:[AuthGuard]},
+    {path: 'products/detail/:id', component: ProductListComponent, canActivate:[AuthGuard]},
+    {path: 'product_type', component: ProductTypeComponent, canActivate:[AuthGuard]},
     {path: 'login', component: LoginComponent}
   ];
 

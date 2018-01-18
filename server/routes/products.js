@@ -5,6 +5,8 @@ var express = require('express');
 
 var router = express.Router();
 
+var userHandler = require('../routes/users.js');
+
 const sproduct = require('../models/product');
 
 //var app = express();
@@ -72,6 +74,7 @@ router.put('/edit',function(req,res){
 
 //sequelize
 router.get('/s',function(req,res){
+    
     sproduct.findAll().then(pros =>{
         res.json(pros);
     });

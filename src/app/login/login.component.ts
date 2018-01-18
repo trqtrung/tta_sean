@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
 import { LoginService } from './login.service';
 import { Login } from './login.model';
-import { error } from 'selenium-webdriver';
+import { MessageService } from '../messages/message.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-    selector: 'app-login',
+    //selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
@@ -18,12 +19,17 @@ export class LoginComponent implements OnInit{
 
     constructor(private router: Router, 
         private route: ActivatedRoute,
-         public loginService: LoginService){
+         public loginService: LoginService,
+        public messageService: MessageService,
+        private authenticationService: AuthenticationService){
 
     }
 
     ngOnInit(){
-        this.loginService.logout();
+        console.log('logout user')
+        this.authenticationService.logout();
+
+        console.log('redirect to after login')
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.login = new Login;
         
@@ -40,21 +46,33 @@ export class LoginComponent implements OnInit{
 
         console.log('pressed login')
 
-        this.loginService.login(this.login).subscribe(
-            result => {
-                if(result)
-                {
-                console.log("success");
-                this.router.navigate([this.returnUrl]);
-                }else{
-                    console.log("error");
-                }
-                
-    },
-error => {
-    this.loading = false;
-})
+        //use login service to login
+        // this.loginService.login(this.login).subscribe(
+        //     result => {
+        //         if(result)
+        //         {
+        //         console.log("success");
+        //         this.router.navigate([this.returnUrl]);
+        //         }else{
+        //             console.log("error");
+        //             this.messageService.add('Username or password incorrect.');
+        //         }               
+        //     },
+        //     error => {
+        //         this.loading = false;
+        //         this.messageService.add('Username or password incorrect.');
+        //     })
 
-
+        //user login function from authentication service
+        this.authenticationService.login(this.login.username, this.login.password)
+            .subscribe(
+                data => {
+                    console.log(this.returnUrl)
+                    this.router.navigate([this.returnUrl]);
+                },
+                error => {
+                    this.messageService.add(error);
+                    this.loading = false;
+                });
     }
 }
