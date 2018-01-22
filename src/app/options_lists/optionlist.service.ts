@@ -17,8 +17,10 @@ import {AppSettings} from '../shared/app-settings';
 
 import 'rxjs/add/operator/map';
 
+let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':`Bearer ${currentUser}`  })
   };
 
 @Injectable()
@@ -33,7 +35,7 @@ export class OptionListService{
     add (opt:OptionList): Observable<OptionList>{
         const url = `${this.apiUrl}`;
         console.log('add option list called in option list service');
-          return this.http.post<OptionList>(url, opt, httpOptions).pipe(
+          return this.http.post<OptionList>(url, opt ).pipe(
             tap((opt: OptionList) => console.log(`added option w/ id=${opt.name}`)),
             catchError(this.handleError<OptionList>('add option'))
           );

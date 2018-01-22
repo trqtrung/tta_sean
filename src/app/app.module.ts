@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core';
 import {LayoutModule} from '@angular/cdk/layout';
 import {FormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 //import { HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 
 import { AppComponent } from './app.component';
@@ -39,7 +40,8 @@ import { MaterialModule} from './shared/material.module';
 
 import { AuthGuard } from './guards/auth.guard';
 
-import { CustomHttp } from './helpers/custom-http';
+import { HttpsRequestInterceptor} from './helpers/https-request-interceptor';
+//import { CustomHttp } from './helpers/custom-http';
 //import { JwtInterceptor } from './helpers/jwt.interceptor';
 
 //import { from } from 'rxjs/observable/from';
@@ -64,10 +66,11 @@ import { CustomHttp } from './helpers/custom-http';
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+     AngularFontAwesomeModule
   ],
   providers: [
-    CustomHttp,
+    //CustomHttp,
     AuthGuard,
     HeroService,
      MessageService,
@@ -75,11 +78,11 @@ import { CustomHttp } from './helpers/custom-http';
        OptionListService,
         LoginService,
         AuthenticationService,
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: JwtInterceptor,
-        //   multi: true
-        // }
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: HttpsRequestInterceptor,
+          multi: true
+        }
       ],
   bootstrap: [AppComponent]
 })

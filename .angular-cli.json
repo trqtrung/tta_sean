@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "angular-tour-of-heroes"
+    "name": "trung-learn-angular-nodejs"
   },
   "apps": [
     {
@@ -9,7 +9,7 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "box.png"
       ],
       "index": "index.html",
       "main": "main.ts",

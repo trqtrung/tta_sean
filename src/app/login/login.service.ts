@@ -31,6 +31,7 @@ export class LoginService {
               if(user && user.token)
               {
                   localStorage.setItem('currentUser', JSON.stringify(user));
+                  console.log(`new token for user ${l.username} ${user.token}`)
               }
               return user;
           })

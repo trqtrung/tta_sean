@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { HttpClientModule } from '@angular/common/http'; 
 import { HttpModule } from '@angular/http';
+//import {CustomHttp} from '../../helpers/custom-http';
 
 import { Observable } from 'rxjs/Rx';
 import { of } from 'rxjs/observable/of';
@@ -15,8 +16,10 @@ import { MessageService } from '../../messages/message.service';
 
 import 'rxjs/add/operator/map';
 
+let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':`Bearer ${currentUser}` })
   };
 
 @Injectable()
@@ -25,11 +28,16 @@ export class ProductService{
 
     private productApiUrl = 'http://localhost:3000/products/s/';
     
+
+
     constructor(
         private http: HttpClient,
         private messageService: MessageService
+        //public customHttp: CustomHttp
         
-    ){}
+    ){
+      console.log(`product service con: ${currentUser}`)
+    }
 
     getProducts(): Observable<Product[]>{
         console.log('get all products');
@@ -46,7 +54,7 @@ export class ProductService{
       console.log('product service - get product by id')
       const url = `${this.productApiUrl}${id}`;
 
-      return this.http.get<Product>(url).map(res => (res as Product))
+      return this.http.get<Product>(url, httpOptions).map(res => (res as Product))
       .pipe(
           tap(hero =>this.log(`fetched product id=${id}`)),
           catchError(this.handleError<Product>(`getProduct id=${id}`))

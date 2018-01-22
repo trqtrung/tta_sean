@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 
 import {DataSource} from '@angular/cdk/collections';
 
-import {MatTableDataSource} from '@angular/material';
+import {MatTableDataSource, MatSnackBar} from '@angular/material';
 
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Rx';
@@ -51,7 +51,8 @@ export class ProductListComponent implements OnInit{
     constructor(private route: ActivatedRoute,
         private productService: ProductService,
         private optionListService: OptionListService,
-        private location: Location)
+        private location: Location,
+        public snackBar: MatSnackBar)
         {
             this.optionListService.getByKey('product.type').subscribe(t => {
                 this.types = t as OptionList[]
@@ -71,6 +72,7 @@ export class ProductListComponent implements OnInit{
             this.dataSource = new ExampleDataSource(this.exampleDatabase);
             //this.dataSource = new MatTableDataSource(this.productData);
             
+            this.snackBar.open('Hi There! This is products list page','Close', {duration: 3000});
         }
 
         getProduct(): void{
@@ -123,6 +125,8 @@ export class ProductListComponent implements OnInit{
             if(!name)
             {
                 console.log('Product Name is blank');
+                this.snackBar.open('Please enter product name','Close', {duration: 3000});
+
                 return;
             }
 
@@ -131,6 +135,8 @@ export class ProductListComponent implements OnInit{
             if(price < 1)
             {
                 console.log('Please insert Product Price');
+                this.snackBar.open('Please enter the Product Price','Close', {duration: 3000});
+
                 return;
             }
 
@@ -138,12 +144,16 @@ export class ProductListComponent implements OnInit{
             {
                 this.productService.updateProduct(this.product).subscribe(result =>{
                    this.refreshProductsTable();
+                   this.snackBar.open('Updated product successfully!','Close', {duration: 3000});
+
                 });              
             }
             else
             {
                 this.productService.addProductBySequelize(this.product).subscribe();
                 this.refreshProductsTable();
+                this.snackBar.open('Added new product successfully!','Close', {duration: 3000});
+
             }
         }
 
