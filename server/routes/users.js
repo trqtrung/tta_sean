@@ -34,27 +34,38 @@ router.post('/', function (req, res) {
     const email = req.body.email;
     var hash = '';
 
-    bcrypt.hash(password, 10, function (err, hash) {
-        // Store hash in database
-        if (hash) {
-            console.log(hash)
-
-            user.create({
-                username: username,
-                password: password,
-                email: email,
-                hash: hash
-            }).then(u => {
-                res.json(u.get())
-            }).catch(err => {
-                res.status(400)
-                res.json(JSON.stringify({ message: err }))
-            })
+    isUsernameUnique(username).then(isUnique => {
+        if (isUnique) {
+            bcrypt.hash(password, 10, function (err, hash) {
+                // Store hash in database
+                if (hash) {
+                    console.log(hash)
+        
+                    user.create({
+                        username: username,
+                        password: password,
+                        email: email,
+                        hash: hash
+                    }).then(u => {
+                        res.json(u.get())
+                    }).catch(err => {
+                        res.status(400)
+                        res.json(JSON.stringify({ message: err }))
+                    })
+                }
+                else {
+                    console.log(err)
+                }
+            });
         }
-        else {
-            console.log(err)
+        else
+        {
+            console.log('username is already exist')
+            res.json(JSON.stringify({ message: 'username is already exist' }))
         }
     });
+
+    
 });
 
 router.post('/login',function(req,res){
@@ -70,6 +81,9 @@ router.post('/login',function(req,res){
             {
                 if(u.hash)
                 {
+                    console.log('login ' +u.username) 
+                    console.log('login ' +u.hash)
+
                     bcrypt.compare(password, u.hash, function(err, result) {
                         if(result) {
                             // Passwords match
@@ -129,31 +143,15 @@ exports.loginRequired = function(req, res, next){
     }
 }
 
-// function authenticate(username, password) {
-//     console.log(username)
-//     var deferred = Q.defer();
-//     console.log(deferred)
-//     //user.findOne({where: {username: username}})
-//     user.findOne({ username: username }, function (err, user) {
-//         if (err) deferred.reject(err.name + ': ' + err.message);
-        
-//         console.log(user.username)
+function isUsernameUnique (username) {
+    return user.count({ where: { username: username } })
+      .then(count => {
+        if (count != 0) {
+          return false;
+        }
+        return true;
+    });
+}
 
-//         if (user && bcrypt.compare(password, user.hash)) {
-//             // authentication successful
-//             deferred.resolve({
-//                 _id: user.id,
-//                 username: user.username,
-//                 fullname: user.fullname,
-//                 token: jwt.sign({ sub: user.id }, config.secret)
-//             });
-//         } else {
-//             // authentication failed
-//             deferred.resolve();
-//         }
-//     });
- 
-//     return deferred.promise;
-// }
 
 module.exports = router;

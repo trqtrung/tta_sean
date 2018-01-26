@@ -44,7 +44,7 @@ export class ProductService{
         const url = `${this.productUrl}/all`;
         return this.http.get<Product[]>(url).map(res => (res as Product[]))
         .pipe(
-          tap(hero =>this.log(`fetched products list`)),
+          //tap(hero =>this.log(`fetched products list`)),
           catchError(this.handleError<Product[]>(`get Products error`))
       );
         
@@ -56,7 +56,7 @@ export class ProductService{
 
       return this.http.get<Product>(url, httpOptions).map(res => (res as Product))
       .pipe(
-          tap(hero =>this.log(`fetched product id=${id}`)),
+          //tap(hero =>this.log(`fetched product id=${id}`)),
           catchError(this.handleError<Product>(`getProduct id=${id}`))
       );
     }

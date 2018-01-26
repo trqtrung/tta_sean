@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
+import { MatSnackBar} from '@angular/material';
 import { LoginService } from './login.service';
 import { Login } from './login.model';
 import { MessageService } from '../messages/message.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
-    //selector: 'app-login',
+    selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
@@ -16,21 +18,32 @@ export class LoginComponent implements OnInit{
     model: {};
     loading = false;
     returnUrl: string;
+    //isLoggedIn: Observable<boolean>;
 
     constructor(private router: Router, 
         private route: ActivatedRoute,
          public loginService: LoginService,
         public messageService: MessageService,
-        private authenticationService: AuthenticationService){
+        private authenticationService: AuthenticationService,
+        public snackBar: MatSnackBar){
 
     }
 
     ngOnInit(){
+        
         console.log('logout user')
-        this.authenticationService.logout();
+        
+        //this.isLoggedIn = this.authenticationService.isLoggedIn;
+        //console.log(this.isLoggedIn)
+        // if(this.isLoggedIn)
+        // {  
+        //     this.snackBar.open('Logged out','Close', {duration: 3000});
+        // }
+        this.authenticationService.logout()
 
-        console.log('redirect to after login')
+        
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        console.log('redirect to after login' + this.returnUrl)
         this.login = new Login;
         
     }

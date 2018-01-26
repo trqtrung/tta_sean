@@ -1,4 +1,4 @@
-<div class="login">
+<div (keyup.enter)="heyLogin()" class="login">
     <h2>Login</h2>
     <mat-form-field>
         <input [(ngModel)]="login.username" matInput required placeholder="Username">
@@ -9,5 +9,4 @@
     <div class="button-row">
         <button mat-button color="primary" (click)="heyLogin()">Login</button>
     </div>
-    
 </div>
