@@ -20,7 +20,7 @@ export class AppComponent implements OnInit{
 
   private _mobileQueryListener: () => void;
 
-  isLoggedIn: Observable<boolean>;
+  isLoggedIn$: Observable<boolean>;
 
   constructor(
     changeDetectorRef: ChangeDetectorRef
@@ -39,10 +39,14 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
-    this.isLoggedIn = this.authService.isLoggedIn;
+    this.isLoggedIn$ = this.authService.isLoggedIn;
   }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  onLogout(){
+    this.authService.logout();
   }
 }

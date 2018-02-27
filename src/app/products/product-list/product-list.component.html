@@ -5,8 +5,8 @@
   <mat-grid-tile>-->
 
     <div>
-      <div style="width:50%; float:left;">
-          <div class="example-container">
+      <div style="width:98%; float:left;">
+          <div class="example-container mat-elevation-z8">
               <mat-form-field>
                   <input [(ngModel)]="product.id" matInput placeholder="ID" readonly>
                 </mat-form-field>
@@ -39,50 +39,61 @@
                  
             </div>
       </div>
-      <div style="width:50%; float:left;">
+      <div style="padding-top:20px; width:98%; float:left;">
           <div class="example-container mat-elevation-z8">
               <div class="example-header">
                   <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                    <input matInput #filter placeholder="Filter products">
                   </mat-form-field>
                 </div>
 
-              <cdk-table #table [dataSource]="dataSource" class="example-table">
+              <mat-table #table [dataSource]="dataSource" matSort>
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
             
                 <!-- ID Column -->
                 <ng-container cdkColumnDef="productId">
-                  <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> ID </cdk-header-cell>
-                  <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.id}} </cdk-cell>
+                  <mat-header-cell *cdkHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                  <mat-cell *cdkCellDef="let row" class="example-cell"> {{row.id}} </mat-cell>
                 </ng-container>
             
           <!-- Name Column -->
           
           <ng-container cdkColumnDef="productName">
-            <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Name </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let row" class="example-cell"><a> {{row.name}}</a> </cdk-cell>
+            <mat-header-cell *cdkHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *cdkCellDef="let row" class="example-cell"><a> {{row.name}}</a> </mat-cell>
             <!-- routerLink="/products/detail/{{row.id}}" -->
           </ng-container>
 
           <!-- Name Column -->
           
           <ng-container cdkColumnDef="productType">
-            <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Type </cdk-header-cell>
-            <cdk-cell *cdkCellDef="let row" class="example-cell"><a> {{row.type}}</a> </cdk-cell>
+            <mat-header-cell *cdkHeaderCellDef mat-sort-header> Type </mat-header-cell>
+            <mat-cell *cdkCellDef="let row" class="example-cell"><a> {{row.type}}</a> </mat-cell>
           </ng-container>
           
-                <!-- Progress Column -->
+                <!-- Price Column -->
                 <ng-container cdkColumnDef="price">
-                  <cdk-header-cell *cdkHeaderCellDef class="example-header-cell"> Price </cdk-header-cell>
-                  <cdk-cell *cdkCellDef="let row" class="example-cell"> {{row.price | number}} vnd</cdk-cell>
-                </ng-container>
+                  <mat-header-cell *cdkHeaderCellDef mat-sort-header> Price </mat-header-cell>
+                  <mat-cell *cdkCellDef="let row" class="example-cell"> {{row.price | number}} vnd</mat-cell>
+                </ng-container>                          
             
-                
-            
-                <cdk-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></cdk-header-row>
-                <cdk-row *cdkRowDef="let row; columns: displayedColumns;" (click)="selectProduct(row)"  class="example-row"></cdk-row>
-              </cdk-table>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns" class="example-header-row"></mat-header-row>
+                <mat-row *cdkRowDef="let row; columns: displayedColumns;" (click)="selectProduct(row)"  class="example-row"></mat-row>
+              </mat-table>
+
+              <div class="example-no-results"
+         [style.display]="dataSource?.renderedData.length == 0 ? '' : 'none'">
+      No products found matching filter.
+    </div>
+  
+    <mat-paginator #paginator 
+                  [length]="dataSource?.filteredData.length"
+                  [pageIndex]="0"
+                  [pageSize]="25"
+                  [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+
             </div>
       </div>
     </div>

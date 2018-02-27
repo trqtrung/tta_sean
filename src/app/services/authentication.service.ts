@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import {AppSettings} from '../shared/app-settings';
 import 'rxjs/add/operator/map'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
+import { Login } from '../login/login.model';
  
 @Injectable()
 export class AuthenticationService {
@@ -12,13 +14,18 @@ export class AuthenticationService {
     private loggedIn = new BehaviorSubject<boolean>(false);
 
     get isLoggedIn(){
+        if(localStorage['currentUser'])
+            this.loggedIn.next(true)
+        else
+            this.loggedIn.next(false)
+            
         return this.loggedIn.asObservable();
     }
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private router: Router) { }
  
-    login(username: string, password: string) {
-        return this.http.post(this.apiUrl+'login', { username: username, password: password })
+    login(login: Login) {
+        return this.http.post(this.apiUrl+'login', { username: login.username, password: login.password })
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -37,5 +44,7 @@ export class AuthenticationService {
         this.loggedIn.next(false);
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+
+        this.router.navigate(['/login']);
     }
 }

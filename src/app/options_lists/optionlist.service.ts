@@ -42,14 +42,23 @@ export class OptionListService{
       }
 
       getByKey(key: string): Observable<OptionList[]>{
-        console.log('get opt by key');
+        console.log('get opt by key '+key);
         const url = `${this.apiUrl}key/${key}`;
         return this.http.get<OptionList[]>(url).map(res => (res as OptionList[]))
         .pipe(
           tap(retult =>console.log(`fetched options list`)),
           catchError(this.handleError<OptionList[]>(`get options list error`))
+      );      
+    }
+
+    getProductTypes(): Observable<OptionList[]>{
+      console.log('opt service - get product types')
+      const url = `${this.apiUrl}key/product.type`;
+
+      return this.http.get<OptionList[]>(url).map(res => (res as OptionList[]))
+      .pipe(
+        catchError(this.handleError<OptionList[]>(`error - get product types`))
       );
-        
     }
 
       private handleError<T> (operation = 'operation', result?: T) {

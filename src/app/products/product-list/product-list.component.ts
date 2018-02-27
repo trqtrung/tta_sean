@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import {DataSource} from '@angular/cdk/collections';
 
-import {MatTableDataSource, MatSnackBar} from '@angular/material';
+import {MatTableDataSource, MatSnackBar, MatPaginator, MatSort} from '@angular/material';
 
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Rx';
@@ -18,10 +18,12 @@ import { OptionList } from '../../options_lists/optionlist.model';
 
 import { OptionListService } from '../../options_lists/optionlist.service';
 
-//import { element } from 'protractor';
-
-
-//import {MessageService} from '../messages/message.service';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
     selector: 'app-product-list',
@@ -48,6 +50,10 @@ export class ProductListComponent implements OnInit{
     public dataSource: ExampleDataSource | null;
     //public dataSource = new MatTableDataSource(this.productData);
         
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild('filter') filter: ElementRef;
+
     constructor(private route: ActivatedRoute,
         private productService: ProductService,
         private optionListService: OptionListService,
@@ -69,11 +75,19 @@ export class ProductListComponent implements OnInit{
 
             this.exampleDatabase = new ExampleDatabase(this.productService);
 
-            this.dataSource = new ExampleDataSource(this.exampleDatabase);
+            this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
             //this.dataSource = new MatTableDataSource(this.productData);
             
             this.snackBar.open('Hi There! This is products list page','Close', {duration: 3000});
-        }
+        
+            Observable.fromEvent(this.filter.nativeElement, 'keyup')
+        .debounceTime(150)
+        .distinctUntilChanged()
+        .subscribe(() => {
+          if (!this.dataSource) { return; }
+          this.dataSource.filter = this.filter.nativeElement.value;
+        });
+    }
 
         getProduct(): void{
             const id = +this.route.snapshot.paramMap.get('id');
@@ -179,15 +193,15 @@ export class ProductListComponent implements OnInit{
             this.product.id = 0;
         }
 
-        applyFilter(filterValue: string) {
-            filterValue = filterValue.trim(); // Remove whitespace
-            filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-            //this.dataSource.filter = filterValue;
-          }
+        // applyFilter(filterValue: string) {
+        //     filterValue = filterValue.trim(); // Remove whitespace
+        //     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+        //     //this.dataSource.filter = filterValue;
+        //   }
 
     refreshProductsTable(): void{
         this.exampleDatabase = new ExampleDatabase(this.productService);
-        this.dataSource = new ExampleDataSource(this.exampleDatabase);
+        this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
     }
 
     delete(): void{
@@ -220,19 +234,6 @@ constructor(private productService: ProductService)
     }
   }
 
-export interface ProductInterface{
-    items: Product[];
-    total_count: number;
-}
-
-//   export class ExampleHttpDao{
-//       constructor(private productService: ProductService){}
-
-//       getProducts(sort: string, order: string, page: number):Observable<ProductInterface>{
-//           return this.productService.getProducts.subscribe(products => this.productData = products);
-//       }
-//   }
-  
   /**
    * Data source to provide what data should be rendered in the table. Note that the data source
    * can retrieve its data in any way. In this case, the data source is provided a reference
@@ -240,26 +241,93 @@ export interface ProductInterface{
    * the underlying data. Instead, it only needs to take the data and send the table exactly what
    * should be rendered.
    */
-  export class ExampleDataSource extends DataSource<any> {
-    constructor(private _exampleDatabase: ExampleDatabase) {
+//   export class ExampleDataSource extends DataSource<any> {
+//     constructor(private _exampleDatabase: ExampleDatabase) {
+//       super();
+//     }
+//     /** Connect function called by the table to retrieve one stream containing the data to render. */
+//     connect(): Observable<Product[]> {
+//       const displayDataChanges = [this._exampleDatabase.dataChange]
+
+// return Observable.merge(...displayDataChanges).map(()=>{
+    
+//     const data = this._exampleDatabase.data.slice();
+    
+//     return data.slice();
+// })
+
+//     }
+  
+//     disconnect() {}
+// }
+
+export class ExampleDataSource extends DataSource<any> {
+    _filterChange = new BehaviorSubject('');
+    get filter(): string { return this._filterChange.value; }
+    set filter(filter: string) { this._filterChange.next(filter); }
+  
+    filteredData: Product[] = [];
+    renderedData: Product[] = [];
+  
+    constructor(private _exampleDatabase: ExampleDatabase,
+                private _paginator: MatPaginator,
+                private _sort: MatSort) {
       super();
+      
+      this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
     }
   
     /** Connect function called by the table to retrieve one stream containing the data to render. */
     connect(): Observable<Product[]> {
-      const displayDataChanges = [this._exampleDatabase.dataChange]
-
-return Observable.merge(...displayDataChanges).map(()=>{
-    
-    const data = this._exampleDatabase.data.slice();
-    
-    return data.slice();
-})
-
+      // Listen for any changes in the base data, sorting, filtering, or pagination
+      const displayDataChanges = [
+        this._exampleDatabase.dataChange,
+        this._sort.sortChange, 
+        this._filterChange,
+        this._paginator.page,
+      ];
+  
+      return Observable.merge(...displayDataChanges).map(() => {
+        // Filter data
+        this.filteredData = this._exampleDatabase.data.slice().filter((item: Product) => {
+          let searchStr = (item.name + item.price).toLowerCase();
+          return searchStr.indexOf(this.filter.toLowerCase()) != -1;
+        });
+  
+        // Sort filtered data
+        const sortedData = this.sortData(this.filteredData.slice());
+  
+        // Grab the page's slice of the filtered sorted data.
+        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+        this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+        return this.renderedData;
+      });
     }
   
     disconnect() {}
-}
+  
+    /** Returns a sorted copy of the database data. */
+    sortData(data: Product[]): Product[] {
+      if (!this._sort.active || this._sort.direction == '') { return data; }
+  
+      return data.sort((a, b) => {
+        let propertyA: number|string = '';
+        let propertyB: number|string = '';
+  
+        switch (this._sort.active) {
+          case 'productId': [propertyA, propertyB] = [a.id, b.id]; break;
+          case 'productName': [propertyA, propertyB] = [a.name, b.name]; break;
+          case 'productType': [propertyA, propertyB] = [a.type, b.type]; break;
+          case 'price': [propertyA, propertyB] = [a.price, b.price]; break;
+        }
+  
+        let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+        let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+  
+        return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+      });
+    }
+  }
 
   /**  Copyright 2017 Google Inc. All Rights Reserved.
       Use of this source code is governed by an MIT-style license that
