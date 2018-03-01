@@ -23,7 +23,7 @@ router.use(function(req, res, next) {
 
 router.get('/all', function(req, res){
 
-    conn.query('SELECT id, name, price, type FROM products', function(err, rows, fields){
+    conn.query('SELECT p.id, p.name, p.price, o.name as type FROM products p LEFT JOIN options_lists o ON p.type = o.id ORDER BY p.name ASC', function(err, rows, fields){
         if(err) throw err
 
         console.log(rows);
@@ -75,7 +75,7 @@ router.put('/edit',function(req,res){
 //sequelize
 router.get('/s',function(req,res){
     
-    sproduct.findAll().then(pros =>{
+    sproduct.findAll({order:['name','ASC']}).then(pros =>{
         res.json(pros);
     });
 });
