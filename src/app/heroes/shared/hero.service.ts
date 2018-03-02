@@ -54,7 +54,7 @@ export class HeroService{
         return this.http.get<Hero[]>(this.heroesUrl+'/all')
         .map(res => (res as Hero[]))
         .pipe(
-          tap(heroes => this.log(`fetched heroes`)),
+          tap(heroes => console.log(`fetched heroes`)),
           catchError(this.handleError('getHeroes', []))
         );       
     }
@@ -74,7 +74,7 @@ export class HeroService{
 
         return this.http.get<Hero>(url).map(res => (res as Hero))
         .pipe(
-            tap(hero =>this.log(`fetched hero id=${id}`)),
+            tap(hero =>console.log(`fetched hero id=${id}`)),
             catchError(this.handleError<Hero>(`getHero id=${id}`))
         );
       }
@@ -84,7 +84,7 @@ export class HeroService{
 const url =  `${this.heroesUrl}/edit`;
 
           return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-            tap(_ => this.log(`updated hero id=${hero.id}`)),
+            tap(_ => console.log(`updated hero id=${hero.id}`)),
             catchError(this.handleError<any>('updateHero'))
           );
       }
@@ -93,7 +93,7 @@ const url =  `${this.heroesUrl}/edit`;
         const url = `${this.heroesUrl}/add`;
 
           return this.http.post<Hero>(url, hero, httpOptions).pipe(
-            tap((hero: Hero) => this.log(`added hero w/ id=${hero.id}`)),
+            tap((hero: Hero) => console.log(`added hero w/ id=${hero.id}`)),
             catchError(this.handleError<Hero>('addHero'))
           );
       }
@@ -103,7 +103,7 @@ const url =  `${this.heroesUrl}/edit`;
           const url =  `${this.heroesUrl}/${id}`;
 
           return this.http.delete<Hero>(url, httpOptions).pipe(
-            tap(_ => this.log(`delete hero id=${id}`)),
+            tap(_ => console.log(`delete hero id=${id}`)),
             catchError(this.handleError<Hero>('deleteHero'))
           );
       }
@@ -114,7 +114,7 @@ const url =  `${this.heroesUrl}/edit`;
           return of([]);
         }
         return this.http.get<Hero[]>(`api/heroes/?name=${term}`).pipe(
-          tap(_ => this.log(`found heroes matching "${term}"`)),
+          tap(_ => console.log(`found heroes matching "${term}"`)),
           catchError(this.handleError<Hero[]>('searchHeroes', []))
         );
       }

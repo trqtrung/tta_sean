@@ -65,7 +65,7 @@ export class ProductService{
         const url = `${this.productUrl}/add`;
         console.log('add product called in product service');
           return this.http.post<Product>(url, product, httpOptions).pipe(
-            tap((product: Product) => this.log(`added product w/ id=${product.name}`)),
+            tap((product: Product) => console.log(`added product w/ id=${product.name}`)),
             catchError(this.handleError<Product>('addProduct'))
           );
       }
@@ -75,7 +75,7 @@ export class ProductService{
 
         console.log('add product by sequelize called in product service');
         return this.http.post<Product>(url, product, httpOptions).pipe(
-          tap((product: Product) => this.log(`added product ${product.name}`)),
+          tap((product: Product) => console.log(`added product ${product.name}`)),
           catchError(this.handleError<Product>('addProductSequelize'))
         );
       }
@@ -86,7 +86,7 @@ export class ProductService{
         console.log('update product')
 
         return this.http.put<Product>(url, product, httpOptions).pipe(
-          tap((product: Product) => this.log(`updated product ${product.name}`)),
+          tap((product: Product) => console.log(`updated product ${product.name}`)),
           catchError(this.handleError<Product>('updateProductSequelize'))
         )
       }
@@ -104,7 +104,7 @@ export class ProductService{
       console.error(error); // log to console instead
  
       // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      //this.log(`${operation} failed: ${error.message}`);
  
       // Let the app keep running by returning an empty result.
       return of(result as T);

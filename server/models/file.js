@@ -11,7 +11,8 @@ const Option = sequelize.define('files',{
         type: Sequelize.STRING
     },
     temp_name:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
     },
     app:{
         type: Sequelize.STRING 
@@ -29,7 +30,8 @@ const Option = sequelize.define('files',{
         type: Sequelize.STRING
     },
     created:{
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
     }    
 },
 {
