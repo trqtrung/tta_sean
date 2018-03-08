@@ -1,0 +1,37 @@
+<h3>Supplier List</h3>
+<div>
+<div style="width:100%; float:left;">
+    <div class="example-container mat-elevation-z8">
+        <mat-form-field>
+            <input [(ngModel)]="supplier.id" matInput placeholder="ID" readonly>
+          </mat-form-field>
+        <mat-form-field>
+          <input [(ngModel)]="supplier.name" required matInput placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+            <input [(ngModel)]="supplier.contact_name" matInput placeholder="Contact Name">
+          </mat-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="supplier.phone" type="tel" class="right-align"  placeholder="Phone">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput [(ngModel)]="supplier.email" type="email" placeholder="Email">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [(ngModel)]="supplier.address" type="address" placeholder="Address">
+          </mat-form-field>
+        
+          
+          <div class="button-row">
+<button mat-button color="basic" (click)="goBack()">Back</button>
+<button mat-button color="primary" [disabled]="!isValid()" mat-raised-button (click)="save()">Save</button>
+<button mat-button color="basic" (click)="clear()">Clear</button>
+<!-- <button mat-raised-button *ngIf="product.id > 0" (click)="delete()" color="warn">Delete</button> -->
+          </div>
+    
+           
+      </div>
+</div>
+</div>

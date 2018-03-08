@@ -29,9 +29,13 @@ import { OptionListService } from './options_lists/optionlist.service';
 import { LoginService } from './login/login.service';
 import { LoginComponent } from './login/login.component';
 
+import { SupplierService } from './suppliers/shared/supplier.service';
+import { SupplierListComponent} from './suppliers/supplier-list/supplier-list.component';
+
 import { AuthenticationService } from './services/authentication.service';
 
 import {AppRoutingModule} from './shared/app-routing.module';
+
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'; //material angular animations
 import { InMemoryDataService} from './in-memory-data.service';
@@ -41,6 +45,8 @@ import { MaterialModule} from './shared/material.module';
 import { AuthGuard } from './guards/auth.guard';
 
 import { HttpsRequestInterceptor} from './helpers/https-request-interceptor';
+
+import {FileUpload} from './helpers/file-upload';
 //import { CustomHttp } from './helpers/custom-http';
 //import { JwtInterceptor } from './helpers/jwt.interceptor';
 
@@ -56,7 +62,8 @@ import { HttpsRequestInterceptor} from './helpers/https-request-interceptor';
     MessagesComponent,
     ProductListComponent,
     ProductTypeComponent, 
-    LoginComponent
+    LoginComponent,
+    SupplierListComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +84,8 @@ import { HttpsRequestInterceptor} from './helpers/https-request-interceptor';
       ProductService,
        OptionListService,
         LoginService,
+        FileUpload,
+        SupplierService,
         AuthenticationService,
         {
           provide: HTTP_INTERCEPTORS,

@@ -27,13 +27,20 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <p> Selected value: {{product.type}} </p>
+                <!-- <p> Selected value: {{product.type}} </p> -->
+                
 
+                  <div *ngIf="product.id > 0" class="button-row">
+                    <button mat-button color="accent" (click)="imgFileInput.click()">Images</button> <input hidden type="file" #imgFileInput multiple (change)="previewImage($event)"/> 
+                  </div>
+
+                
                 <div class="button-row">
  <!-- <button mat-button color="primary" (click)="save()">Create</button> -->
+ 
  <button mat-button color="primary" [disabled]="!isValid()" mat-raised-button (click)="save_sequlize()">Save</button>
  <button mat-button color="basic" (click)="clear()">Clear</button>
- <button mat-raised-button (click)="delete()" color="warn">Delete</button>
+ <button mat-raised-button *ngIf="product.id > 0" (click)="delete()" color="warn">Delete</button>
                 </div>
           
                  

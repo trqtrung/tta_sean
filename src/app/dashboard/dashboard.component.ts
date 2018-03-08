@@ -11,14 +11,20 @@ import { HeroService } from '../heroes/shared/hero.service';
 export class DashboardComponent implements OnInit {
     heroes: Hero[] = [];
    
-    constructor(private heroService: HeroService) { }
+    public now: Date = new Date();
+    constructor(private heroService: HeroService) { 
+      setInterval(() =>{
+        this.now = new Date();
+      },1);
+
+    }
    
     title: string;
 
     ngOnInit() {
       this.getHeroes();
-
-      this.title = 'Top heroes 4';
+      var date = new Date()
+     this.title = 'Welcome to Tran Trung Anh website';
     }
    
     getHeroes(): void {

@@ -18,6 +18,8 @@ import { OptionList } from '../../options_lists/optionlist.model';
 
 import { OptionListService } from '../../options_lists/optionlist.service';
 
+import {FileUpload} from '../../helpers/file-upload';
+
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/fromEvent';
@@ -44,6 +46,8 @@ export class ProductListComponent implements OnInit{
 
     types: OptionList[];
 
+    filesToUpload: Array<File> = []
+
 
     public displayedColumns = ['productId', 'productName', 'productType', 'price'];
     public exampleDatabase : ExampleDatabase | null;
@@ -58,7 +62,8 @@ export class ProductListComponent implements OnInit{
         private productService: ProductService,
         private optionListService: OptionListService,
         private location: Location,
-        public snackBar: MatSnackBar)
+        public snackBar: MatSnackBar,
+        private fileUpload: FileUpload)
         {
             this.optionListService.getByKey('product.type').subscribe(t => {
                 this.types = t as OptionList[]
@@ -158,6 +163,7 @@ export class ProductListComponent implements OnInit{
             {
                 this.productService.updateProduct(this.product).subscribe(result =>{
                    this.refreshProductsTable();
+                   this.upload();
                    this.snackBar.open('Updated product successfully!','Close', {duration: 3000});
 
                 });              
@@ -216,6 +222,50 @@ export class ProductListComponent implements OnInit{
 
     getTypes(){
         return this.optionListService.getByKey('product.type').subscribe()
+    }
+
+    previewImage(fileInput: any){
+        this.filesToUpload = <Array<File>>fileInput.target.files
+
+        console.log(this.filesToUpload)
+    //     let fileList: FileList = event.target.files
+
+    //     console.log('file upload '+ fileList.length)
+
+    // if(fileList.length > 0) {
+    //     let file: File = fileList[0]
+    //     let formData:FormData = new FormData()
+    //     formData.append('uploadFile', file, file.name)
+    //     let headers = new Headers()
+    //     /** No need to include Content-Type in Angular 4 */
+    //     // headers.append('Content-Type', 'multipart/form-data');
+    //     // headers.append('Accept', 'application/json');
+    //     // let options = new RequestOptions({ headers: headers });
+    //     // this.http.post(`${this.apiEndPoint}`, formData, options)
+    //     //     .map(res => res.json())
+    //     //     .catch(error => Observable.throw(error))
+    //     //     .subscribe(
+    //     //         data => console.log('success'),
+    //     //         error => console.log(error)
+    //     //     )
+    // }
+    }
+
+    upload(){
+        const formData: any = new FormData()
+
+        const files: Array<File> = this.filesToUpload
+
+        console.log(files)
+
+        for(let i = 0; i< files.length;i++)
+        {
+            formData.append("files", files[i], files[i]['name'])
+        }
+
+        console.log('form data variable : '+formData.toString())
+
+        this.fileUpload.uploads(formData, this.product.id, 'product').subscribe(res => console.log(res))
     }
 }
   

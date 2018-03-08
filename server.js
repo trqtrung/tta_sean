@@ -39,6 +39,9 @@ app.use('/users',users);
 const files = require('./server/routes/files');
 app.use('/files', files);
 
+const suppliers = require('./server/routes/suppliers');
+app.use('/suppliers', suppliers);
+
 // const sequelize = require('./server/routes/sequelize');
 // app.use('/sequelize',sequelize);
 

@@ -11,6 +11,9 @@ import { ProductListComponent} from '../products/product-list/product-list.compo
 import {ProductTypeComponent} from '../products/product-type/product-type.component';
 
 import {LoginComponent} from '../login/login.component';
+
+import { SupplierListComponent} from '../suppliers/supplier-list/supplier-list.component';
+
 import { from } from 'rxjs/observable/from';
 
 import { AuthGuard } from '../guards/auth.guard';
@@ -23,8 +26,8 @@ const routes: Routes = [
     {path: 'products', component: ProductListComponent, canActivate:[AuthGuard]},
     {path: 'products/detail/:id', component: ProductListComponent, canActivate:[AuthGuard]},
     {path: 'product_type', component: ProductTypeComponent, canActivate:[AuthGuard]},
-    {path: 'login', component: LoginComponent},
-
+    {path: 'login', component: LoginComponent},//no need authenticate guard token
+    {path: 'suppliers', component: SupplierListComponent, canActivate:[AuthGuard]}
   ];
 
 @NgModule({
