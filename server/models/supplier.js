@@ -13,6 +13,9 @@ const Supplier = sequelize.define('suppliers',{
     contact_name:{
         type: Sequelize.STRING
     },
+    website:{
+        type: Sequelize.STRING
+    },
     phone:{
         type: Sequelize.JSON 
     },

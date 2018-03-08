@@ -30,6 +30,7 @@ router.post('/',function(req,res){
         address: req.body.address,
         email: req.body.email,
         product_type: req.body.product_type,
+        website: req.body.website,
         created: Sequelize.fn('NOW')
     }).then(sup =>{ 
         res.json(sup.get())
@@ -46,6 +47,7 @@ router.put('/',function(req, res){
         phone: req.body.phone,
         address: req.body.address,
         email: req.body.email,
+        website: req.body.website,
         product_type: req.body.product_type
     },{
         where:{

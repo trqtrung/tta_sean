@@ -11,8 +11,11 @@
         <mat-form-field>
             <input [(ngModel)]="supplier.contact_name" matInput placeholder="Contact Name">
           </mat-form-field>
+          <mat-form-field>
+            <input [(ngModel)]="supplier.website" type="url" matInput placeholder="Website">
+          </mat-form-field>
         <mat-form-field>
-            <input matInput [(ngModel)]="supplier.phone" type="tel" class="right-align"  placeholder="Phone">
+            <input matInput [(ngModel)]="supplier.phone" type="tel"  placeholder="Phone">
           </mat-form-field>
       
           <mat-form-field>

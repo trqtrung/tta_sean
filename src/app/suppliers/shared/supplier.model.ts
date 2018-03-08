@@ -6,6 +6,7 @@ export class Supplier{
     address: string;
     email: string;
     product_type: string;
+    website: string;
     constructor(
         
         ){}  
